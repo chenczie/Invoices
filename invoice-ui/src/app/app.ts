@@ -198,13 +198,8 @@ export class App {
   readonly jobs = JOBS;
   readonly jobDetails = JOB_DETAILS;
 
-  selectedInvoiceId: number | null = this.invoices[0]?.id ?? null;
+  selectedInvoiceId: number | null = null;
   selectedJobId: number | null = null;
-
-  constructor() {
-    const initialJob = this.filteredJobs[0];
-    this.selectedJobId = initialJob?.id ?? null;
-  }
 
   get selectedInvoice(): Invoice | undefined {
     return this.invoices.find((invoice) => invoice.id === this.selectedInvoiceId);
@@ -224,8 +219,19 @@ export class App {
     return this.jobDetails.filter((detail) => detail.jobId === this.selectedJobId);
   }
 
+  get breadcrumbItems(): string[] {
+    const items = ['Invoices'];
+    if (this.selectedInvoice) {
+      items.push(this.selectedInvoice.invoiceNumber);
+    }
+    if (this.selectedJobId) {
+      items.push(`Job ${this.selectedJobId}`);
+    }
+    return items;
+  }
+
   selectInvoice(invoice: Invoice): void {
-    this.selectedInvoiceId = invoice.id ?? null;
+    this.selectedInvoiceId = invoice.id;
     const nextJob = this.filteredJobs[0];
     this.selectedJobId = nextJob?.id ?? null;
   }

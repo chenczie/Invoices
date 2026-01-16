@@ -121,6 +121,27 @@
   gap: 12px;
 }
 
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #6b7a90;
+}
+
+.breadcrumb-item {
+  color: #6b7a90;
+}
+
+.breadcrumb-item.active {
+  color: #1f2a44;
+  font-weight: 600;
+}
+
+.breadcrumb-separator {
+  color: #9aa7bd;
+}
+
 .action-link {
   border: none;
   background: transparent;

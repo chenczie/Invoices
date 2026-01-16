@@ -53,6 +53,13 @@
       </div>
     </section>
 
+    <nav class="breadcrumb" aria-label="Invoice breadcrumb">
+      <span *ngFor="let item of breadcrumbItems; let last = last">
+        <span class="breadcrumb-item" [class.active]="last">{{ item }}</span>
+        <span class="breadcrumb-separator" *ngIf="!last">/</span>
+      </span>
+    </nav>
+
     <section class="portlet">
       <header class="portlet-header">
         <div class="portlet-title">
@@ -155,7 +162,7 @@
       </div>
     </section>
 
-    <section class="portlet">
+    <section class="portlet" *ngIf="selectedInvoiceId">
       <header class="portlet-header">
         <div class="portlet-title">
           <h2>Jobs</h2>
@@ -224,7 +231,7 @@
       </div>
     </section>
 
-    <section class="portlet">
+    <section class="portlet" *ngIf="selectedInvoiceId">
       <header class="portlet-header">
         <div class="portlet-title">
           <h2>Job Details</h2>
