@@ -1,0 +1,211 @@
+<div class="app-shell">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">A</div>
+      <span class="brand-name">Alchem-e</span>
+    </div>
+    <div class="topbar-actions">
+      <span class="last-login">Last Login: Wed, Apr 18, 2023, 4:55pm</span>
+      <button class="icon-button" type="button" aria-label="Notifications">
+        <span class="badge">99+</span>
+        <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M12 10V7a4 4 0 0 0-8 0v3L2.5 12h11L12 10z" />
+          <path d="M6 12a2 2 0 0 0 4 0" />
+        </svg>
+      </button>
+      <button class="icon-button" type="button" aria-label="Refresh">
+        <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M13 8a5 5 0 1 1-2-4" />
+          <path d="M11 2h3v3" />
+        </svg>
+      </button>
+      <div class="avatar-circle">JD</div>
+    </div>
+  </header>
+
+  <div class="body">
+    <aside class="sidebar">
+      <div class="profile">
+        <div class="profile-avatar">JD</div>
+        <div class="profile-name">Name</div>
+        <button class="profile-action" type="button" aria-label="Open profile menu">
+          <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M4 6l4 4 4-4" />
+          </svg>
+        </button>
+      </div>
+      <nav class="nav">
+        <button
+          class="nav-item"
+          *ngFor="let item of navItems"
+          type="button"
+          [class.active]="item.active"
+        >
+          <span class="nav-dot" aria-hidden="true"></span>
+          <span>{{ item.label }}</span>
+        </button>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <section class="page-header">
+        <div class="page-title">
+          <h1>Invoice</h1>
+        </div>
+        <div class="page-actions">
+          <button class="action-link" type="button">
+            <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M8 2v7m0 0l3-3m-3 3L5 6" />
+              <path d="M3 13h10" />
+            </svg>
+            Download XL
+          </button>
+          <button class="action-link" type="button">
+            <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M8 11V4m0 0L5 7m3-3l3 3" />
+              <path d="M3 12v2h10v-2" />
+            </svg>
+            Export
+          </button>
+          <button class="action-link" type="button">
+            <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M4 3v10M8 3v10M12 3v10" />
+            </svg>
+            Columns
+          </button>
+          <button class="action-link disabled" type="button" aria-disabled="true">
+            <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M8 2v7m0 0l3-3m-3 3L5 6" />
+              <path d="M3 13h10" />
+            </svg>
+            Download Selected Files as XL
+          </button>
+          <button class="action-link disabled" type="button" aria-disabled="true">
+            <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M4 5h8l-1 9H5L4 5z" />
+              <path d="M6 5V3h4v2" />
+            </svg>
+            Delete
+          </button>
+        </div>
+      </section>
+
+      <section class="meta-row">
+        <span class="invoice-count">{{ invoices.length }} Invoices</span>
+      </section>
+
+      <section class="filter-row">
+        <label class="search">
+          <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+            <circle cx="7" cy="7" r="4"></circle>
+            <path d="M10.5 10.5L14 14" />
+          </svg>
+          <input type="search" placeholder="Search" aria-label="Search invoices" />
+        </label>
+
+        <div class="filter-chip" *ngFor="let filter of filters">
+          <span class="filter-label">{{ filter.label }}</span>
+          <span class="filter-value">{{ filter.value }}</span>
+          <button class="chip-close" type="button" aria-label="Remove filter">
+            x
+          </button>
+        </div>
+
+        <button class="add-filter" type="button">
+          <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M2 3h12L9.5 8v5l-3 1V8L2 3z" />
+          </svg>
+          Add filter
+        </button>
+      </section>
+
+      <section class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-select">
+                <input type="checkbox" aria-label="Select all invoices" />
+              </th>
+              <th class="col-invoice">Invoice Number</th>
+              <th>
+                Column header
+                <svg class="sort-icon" viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M4 9l4-4 4 4" />
+                </svg>
+              </th>
+              <th>
+                Column header
+                <svg class="sort-icon" viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M4 7l4 4 4-4" />
+                </svg>
+              </th>
+              <th>
+                Column header
+                <svg class="sort-icon" viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M4 9l4-4 4 4" />
+                </svg>
+              </th>
+              <th class="col-actions"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let invoice of invoices">
+              <td>
+                <input type="checkbox" aria-label="Select invoice" />
+              </td>
+              <td class="col-invoice">
+                <button class="invoice-link" type="button">
+                  {{ invoice.invoiceNumber }}
+                </button>
+              </td>
+              <td>{{ invoice.customField1 }}</td>
+              <td>{{ invoice.customField2 }}</td>
+              <td>{{ invoice.customField3 }}</td>
+              <td class="col-actions">
+                <button class="kebab" type="button" aria-label="More actions">
+                  <span class="kebab-dot"></span>
+                  <span class="kebab-dot"></span>
+                  <span class="kebab-dot"></span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="table-footer">
+          <div class="page-size">
+            <span>Show</span>
+            <button class="page-size-select" type="button">
+              20
+              <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M4 6l4 4 4-4" />
+              </svg>
+            </button>
+            <span>Per Page</span>
+          </div>
+          <div class="pagination">
+            <button class="page-arrow" type="button" aria-label="Previous page">
+              <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M10 4l-4 4 4 4" />
+              </svg>
+            </button>
+            <button class="page-number" type="button">1</button>
+            <button class="page-number active" type="button">2</button>
+            <button class="page-number" type="button">3</button>
+            <button class="page-number" type="button">4</button>
+            <button class="page-number" type="button">5</button>
+            <button class="page-number" type="button">6</button>
+            <button class="page-number" type="button">7</button>
+            <span class="page-ellipsis">...</span>
+            <button class="page-number" type="button">10</button>
+            <button class="page-arrow" type="button" aria-label="Next page">
+              <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M6 4l4 4-4 4" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
