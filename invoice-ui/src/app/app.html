@@ -23,189 +23,266 @@
     </div>
   </header>
 
-  <div class="body">
-    <aside class="sidebar">
-      <div class="profile">
-        <div class="profile-avatar">JD</div>
-        <div class="profile-name">Name</div>
-        <button class="profile-action" type="button" aria-label="Open profile menu">
+  <main class="page">
+    <section class="page-header">
+      <div>
+        <h1>Invoice</h1>
+        <p class="page-subtitle">Invoice tab with drill-down to Jobs and Job Details.</p>
+      </div>
+      <div class="page-actions">
+        <button class="action-link" type="button">
           <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-            <path d="M4 6l4 4 4-4" />
+            <path d="M8 2v7m0 0l3-3m-3 3L5 6" />
+            <path d="M3 13h10" />
           </svg>
+          Download XL
+        </button>
+        <button class="action-link" type="button">
+          <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M8 11V4m0 0L5 7m3-3l3 3" />
+            <path d="M3 12v2h10v-2" />
+          </svg>
+          Export
+        </button>
+        <button class="action-link" type="button">
+          <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M4 3v10M8 3v10M12 3v10" />
+          </svg>
+          Columns
         </button>
       </div>
-      <nav class="nav">
-        <button
-          class="nav-item"
-          *ngFor="let item of navItems"
-          type="button"
-          [class.active]="item.active"
-        >
-          <span class="nav-dot" aria-hidden="true"></span>
-          <span>{{ item.label }}</span>
-        </button>
-      </nav>
-    </aside>
+    </section>
 
-    <main class="content">
-      <section class="page-header">
-        <div class="page-title">
-          <h1>Invoice</h1>
+    <section class="portlet">
+      <header class="portlet-header">
+        <div class="portlet-title">
+          <h2>Invoices</h2>
+          <span class="portlet-meta">{{ invoices.length }} Invoices</span>
+          <span class="portlet-meta">Selected: {{ selectedInvoice ? 1 : 0 }}</span>
         </div>
-        <div class="page-actions">
-          <button class="action-link" type="button">
+        <div class="portlet-controls">
+          <div class="tab-group">
+            <button class="tab active" type="button">Invoices</button>
+            <button class="tab" type="button">Invoice Admin</button>
+          </div>
+          <button class="icon-button ghost" type="button" aria-label="Configure columns">
             <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-              <path d="M8 2v7m0 0l3-3m-3 3L5 6" />
-              <path d="M3 13h10" />
+              <path d="M3 7h10v6H3z" />
+              <path d="M8 7V3l3 2" />
+              <path d="M8 3L5 5" />
             </svg>
-            Download XL
-          </button>
-          <button class="action-link" type="button">
-            <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-              <path d="M8 11V4m0 0L5 7m3-3l3 3" />
-              <path d="M3 12v2h10v-2" />
-            </svg>
-            Export
-          </button>
-          <button class="action-link" type="button">
-            <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-              <path d="M4 3v10M8 3v10M12 3v10" />
-            </svg>
-            Columns
-          </button>
-          <button class="action-link disabled" type="button" aria-disabled="true">
-            <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-              <path d="M8 2v7m0 0l3-3m-3 3L5 6" />
-              <path d="M3 13h10" />
-            </svg>
-            Download Selected Files as XL
-          </button>
-          <button class="action-link disabled" type="button" aria-disabled="true">
-            <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-              <path d="M4 5h8l-1 9H5L4 5z" />
-              <path d="M6 5V3h4v2" />
-            </svg>
-            Delete
           </button>
         </div>
-      </section>
+      </header>
 
-      <section class="meta-row">
-        <span class="invoice-count">{{ invoices.length }} Invoices</span>
-      </section>
-
-      <section class="filter-row">
+      <div class="portlet-tools">
         <label class="search">
           <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
             <circle cx="7" cy="7" r="4"></circle>
             <path d="M10.5 10.5L14 14" />
           </svg>
-          <input type="search" placeholder="Search" aria-label="Search invoices" />
+          <input type="search" placeholder="Search invoices" aria-label="Search invoices" />
         </label>
+        <div class="portlet-hint">PDF and XLS names match uploaded files.</div>
+      </div>
 
-        <div class="filter-chip" *ngFor="let filter of filters">
-          <span class="filter-label">{{ filter.label }}</span>
-          <span class="filter-value">{{ filter.value }}</span>
-          <button class="chip-close" type="button" aria-label="Remove filter">
-            x
-          </button>
-        </div>
-
-        <button class="add-filter" type="button">
-          <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-            <path d="M2 3h12L9.5 8v5l-3 1V8L2 3z" />
-          </svg>
-          Add filter
-        </button>
-      </section>
-
-      <section class="table-card">
-        <table>
+      <div class="table-wrapper">
+        <table class="data-table">
           <thead>
             <tr>
-              <th class="col-select">
-                <input type="checkbox" aria-label="Select all invoices" />
-              </th>
-              <th class="col-invoice">Invoice Number</th>
-              <th>
-                Column header
-                <svg class="sort-icon" viewBox="0 0 16 16" aria-hidden="true">
-                  <path d="M4 9l4-4 4 4" />
-                </svg>
-              </th>
-              <th>
-                Column header
-                <svg class="sort-icon" viewBox="0 0 16 16" aria-hidden="true">
-                  <path d="M4 7l4 4 4-4" />
-                </svg>
-              </th>
-              <th>
-                Column header
-                <svg class="sort-icon" viewBox="0 0 16 16" aria-hidden="true">
-                  <path d="M4 9l4-4 4 4" />
-                </svg>
-              </th>
+              <th>Site</th>
+              <th>Billing Client Number</th>
+              <th>Invoice Description</th>
+              <th>Invoice Number</th>
+              <th>Invoice Date</th>
+              <th>PDF</th>
+              <th>Spreadsheet Download</th>
+              <th>View Events</th>
               <th class="col-actions"></th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let invoice of invoices">
+            <tr
+              *ngFor="let invoice of invoices"
+              [class.selected]="invoice.id === selectedInvoiceId"
+            >
+              <td>{{ invoice.site }}</td>
+              <td>{{ invoice.billingClientNumber }}</td>
+              <td>{{ invoice.invoiceDescription }}</td>
               <td>
-                <input type="checkbox" aria-label="Select invoice" />
-              </td>
-              <td class="col-invoice">
-                <button class="invoice-link" type="button">
+                <button class="link" type="button" (click)="selectInvoice(invoice)">
                   {{ invoice.invoiceNumber }}
                 </button>
               </td>
-              <td>{{ invoice.customField1 }}</td>
-              <td>{{ invoice.customField2 }}</td>
-              <td>{{ invoice.customField3 }}</td>
+              <td>{{ invoice.statementDate | date: 'yyyy-MM-dd' }}</td>
+              <td>
+                <a class="file-link" [href]="invoice.pdfUrl" target="_blank" rel="noreferrer">
+                  <span class="file-icon pdf">PDF</span>
+                  <span class="file-name">{{ invoice.pdfFileName }}</span>
+                </a>
+              </td>
+              <td>
+                <a class="file-link" [href]="invoice.excelUrl" download>
+                  <span class="file-icon xls">XLS</span>
+                  <span class="file-name">{{ invoice.excelFileName }}</span>
+                </a>
+              </td>
+              <td>
+                <button class="link secondary" type="button">View</button>
+              </td>
               <td class="col-actions">
-                <button class="kebab" type="button" aria-label="More actions">
-                  <span class="kebab-dot"></span>
-                  <span class="kebab-dot"></span>
-                  <span class="kebab-dot"></span>
-                </button>
+                <details class="action-menu">
+                  <summary aria-label="User Action Menu">
+                    <span class="kebab-dot"></span>
+                    <span class="kebab-dot"></span>
+                    <span class="kebab-dot"></span>
+                  </summary>
+                  <div class="menu">
+                    <button type="button">Edit Invoice</button>
+                    <a [href]="invoice.excelUrl" download>
+                      Associated Files
+                      <span class="menu-meta">{{ invoice.excelFileName }}</span>
+                    </a>
+                    <button type="button">View Details</button>
+                    <button type="button">Comments</button>
+                    <button type="button">Audit History</button>
+                  </div>
+                </details>
               </td>
             </tr>
           </tbody>
         </table>
+      </div>
+    </section>
 
-        <div class="table-footer">
-          <div class="page-size">
-            <span>Show</span>
-            <button class="page-size-select" type="button">
-              20
-              <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-                <path d="M4 6l4 4 4-4" />
-              </svg>
-            </button>
-            <span>Per Page</span>
-          </div>
-          <div class="pagination">
-            <button class="page-arrow" type="button" aria-label="Previous page">
-              <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-                <path d="M10 4l-4 4 4 4" />
-              </svg>
-            </button>
-            <button class="page-number" type="button">1</button>
-            <button class="page-number active" type="button">2</button>
-            <button class="page-number" type="button">3</button>
-            <button class="page-number" type="button">4</button>
-            <button class="page-number" type="button">5</button>
-            <button class="page-number" type="button">6</button>
-            <button class="page-number" type="button">7</button>
-            <span class="page-ellipsis">...</span>
-            <button class="page-number" type="button">10</button>
-            <button class="page-arrow" type="button" aria-label="Next page">
-              <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-                <path d="M6 4l4 4-4 4" />
-              </svg>
-            </button>
-          </div>
+    <section class="portlet">
+      <header class="portlet-header">
+        <div class="portlet-title">
+          <h2>Jobs</h2>
+          <span class="portlet-meta">
+            Invoice: {{ selectedInvoice?.invoiceNumber || 'Select an invoice' }}
+          </span>
+          <span class="portlet-meta">Selected: {{ selectedJobId ? 1 : 0 }}</span>
         </div>
-      </section>
-    </main>
-  </div>
+        <button class="icon-button ghost" type="button" aria-label="Configure columns">
+          <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M3 7h10v6H3z" />
+            <path d="M8 7V3l3 2" />
+            <path d="M8 3L5 5" />
+          </svg>
+        </button>
+      </header>
+
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Job ID</th>
+              <th>Product</th>
+              <th>Rejected Quantity</th>
+              <th>Mailed Quantity</th>
+              <th>Print File Name</th>
+              <th>Invoice Number</th>
+              <th>Status</th>
+              <th>Ship Carrier ID</th>
+              <th>Ship Method ID</th>
+              <th>Status Event Changed By</th>
+              <th>Status Event Date</th>
+              <th>PDF</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="filteredJobs.length === 0" class="empty-row">
+              <td colspan="12">Select an invoice to view related jobs.</td>
+            </tr>
+            <tr
+              *ngFor="let job of filteredJobs"
+              [class.selected]="job.id === selectedJobId"
+            >
+              <td>
+                <button class="link" type="button" (click)="selectJob(job)">
+                  {{ job.id }}
+                </button>
+              </td>
+              <td>{{ job.product }}</td>
+              <td>{{ job.rejectedQuantity }}</td>
+              <td>{{ job.mailedQuantity }}</td>
+              <td>{{ job.printFileName }}</td>
+              <td>{{ job.invoiceNumber }}</td>
+              <td>{{ job.status }}</td>
+              <td>{{ job.shipCarrierId }}</td>
+              <td>{{ job.shipMethodId }}</td>
+              <td>{{ job.statusEventChangedBy }}</td>
+              <td>{{ job.statusEventDate }}</td>
+              <td>
+                <span class="file-icon pdf">PDF</span>
+                {{ job.pdfFileName }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="portlet">
+      <header class="portlet-header">
+        <div class="portlet-title">
+          <h2>Job Details</h2>
+          <span class="portlet-meta">
+            Job: {{ selectedJobId || 'Select a job' }}
+          </span>
+        </div>
+        <button class="icon-button ghost" type="button" aria-label="Configure columns">
+          <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M3 7h10v6H3z" />
+            <path d="M8 7V3l3 2" />
+            <path d="M8 3L5 5" />
+          </svg>
+        </button>
+      </header>
+
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Option ID</th>
+              <th>SLA Date</th>
+              <th>Print File Name</th>
+              <th>Product</th>
+              <th>Rejected Quantity</th>
+              <th>Mailed Quantity</th>
+              <th>Ship Carrier ID</th>
+              <th>Ship Method ID</th>
+              <th>Status Event Changed By</th>
+              <th>Status Event Date</th>
+              <th>PDF</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="filteredJobDetails.length === 0" class="empty-row">
+              <td colspan="12">Select a job to view job details.</td>
+            </tr>
+            <tr *ngFor="let detail of filteredJobDetails">
+              <td>{{ detail.status }}</td>
+              <td>{{ detail.optionId }}</td>
+              <td>{{ detail.slaDate }}</td>
+              <td>{{ detail.printFileName }}</td>
+              <td>{{ detail.product }}</td>
+              <td>{{ detail.rejectedQuantity }}</td>
+              <td>{{ detail.mailedQuantity }}</td>
+              <td>{{ detail.shipCarrierId }}</td>
+              <td>{{ detail.shipMethodId }}</td>
+              <td>{{ detail.statusEventChangedBy }}</td>
+              <td>{{ detail.statusEventDate }}</td>
+              <td>
+                <span class="file-icon pdf">PDF</span>
+                {{ detail.pdfFileName }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
 </div>

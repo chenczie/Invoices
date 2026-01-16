@@ -2,209 +2,186 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 import { Invoice } from './models/invoice.model';
-import { InvoiceType } from './models/invoice-type.model';
-
-interface NavItem {
-  label: string;
-  active?: boolean;
-}
-
-interface FilterChip {
-  label: string;
-  value: string;
-}
-
-const NAV_ITEMS: NavItem[] = [
-  { label: 'Dashboard' },
-  { label: 'Jobs Dashboard' },
-  { label: 'Production Dashboard' },
-  { label: 'Files' },
-  { label: 'Analytics/Reporting' },
-  { label: 'Doc Writer' },
-  { label: 'Templates/Orders' },
-  { label: 'Print Queue' },
-  { label: 'Department Dashboard' },
-  { label: 'Scan Station' },
-  { label: 'Inventory' },
-  { label: 'Escrow' },
-  { label: 'Approval View' },
-  { label: 'Consumer' },
-  { label: 'Asset Management' },
-  { label: 'Document Search' },
-  { label: 'Reprint Records' },
-  { label: 'Invoice', active: true },
-  { label: 'Form Submission' },
-  { label: 'Engine Monitor' },
-  { label: 'Workflow' },
-  { label: 'Scripts' },
-  { label: 'Admin' }
-];
-
-const INVOICE_TYPES: InvoiceType[] = [
-  {
-    id: 1,
-    invoiceTypeDescription: 'Standard Billing',
-    assetDirectory: '/assets/invoices/standard',
-    siteId: 1
-  },
-  {
-    id: 2,
-    invoiceTypeDescription: 'Escrow Statement',
-    assetDirectory: '/assets/invoices/escrow',
-    siteId: 1
-  },
-  {
-    id: 3,
-    invoiceTypeDescription: 'Production Run',
-    assetDirectory: '/assets/invoices/production',
-    siteId: 2
-  }
-];
+import { Job } from './models/job.model';
+import { JobDetail } from './models/job-detail.model';
 
 const INVOICES: Invoice[] = [
   {
-    id: 1001,
-    companyId: 24,
-    jobId: 18,
-    invoiceTypeId: 1,
-    invoiceNumber: 'Primary string',
-    alternateCompanyName: 'Alchem-e Labs',
-    statementDate: new Date('2024-03-05'),
-    pdfFileName: 'invoice-1001.pdf',
-    productId: 11,
-    customField1: 'Cell string',
-    customField2: 'Cell string',
-    customField3: 'Cell string',
-    customField4: 'Cell string',
-    siteId: 3,
-    billingClientNumber: 'BC-391',
-    excelFileName: 'invoice-1001.xlsx'
+    id: 93,
+    siteId: 10,
+    site: 'Atlanta Office',
+    billingClientNumber: '1111C',
+    invoiceDescription: 'CCo',
+    invoiceNumber: '12345C',
+    statementDate: new Date('2021-10-12'),
+    pdfFileName: 'Invoices_03292022.pdf',
+    excelFileName: 'Invoices_03292022.xls',
+    pdfUrl: '/assets/invoices/Invoices_03292022.pdf',
+    excelUrl: '/assets/invoices/Invoices_03292022.xls'
   },
   {
-    id: 1002,
-    companyId: 24,
-    jobId: 22,
-    invoiceTypeId: 2,
-    invoiceNumber: 'Primary string',
-    alternateCompanyName: 'Alchem-e Labs',
-    statementDate: new Date('2024-03-06'),
-    pdfFileName: 'invoice-1002.pdf',
-    productId: 14,
-    customField1: 'Cell string',
-    customField2: 'Cell string',
-    customField3: 'Cell string',
-    customField4: 'Cell string',
-    siteId: 3,
-    billingClientNumber: 'BC-402',
-    excelFileName: 'invoice-1002.xlsx'
+    id: 94,
+    siteId: 10,
+    site: 'Atlanta Office',
+    billingClientNumber: '100006223',
+    invoiceDescription: 'Chen Co Annex',
+    invoiceNumber: '12345D',
+    statementDate: new Date('2021-10-12'),
+    pdfFileName: 'Invoices_11242022.pdf',
+    excelFileName: 'Invoices_11242022.xls',
+    pdfUrl: '/assets/invoices/Invoices_11242022.pdf',
+    excelUrl: '/assets/invoices/Invoices_11242022.xls'
   },
   {
-    id: 1003,
-    companyId: 24,
-    jobId: 25,
-    invoiceTypeId: 3,
-    invoiceNumber: 'Primary string',
-    alternateCompanyName: 'Alchem-e Labs',
-    statementDate: new Date('2024-03-07'),
-    pdfFileName: 'invoice-1003.pdf',
-    productId: 21,
-    customField1: 'Cell string',
-    customField2: 'Cell string',
-    customField3: 'Cell string',
-    customField4: 'Cell string',
-    siteId: 3,
-    billingClientNumber: 'BC-410',
-    excelFileName: 'invoice-1003.xlsx'
+    id: 95,
+    siteId: 10,
+    site: 'Atlanta Office',
+    billingClientNumber: '1111C',
+    invoiceDescription: 'CCo',
+    invoiceNumber: '12345C',
+    statementDate: new Date('2021-10-12'),
+    pdfFileName: 'test5.pdf',
+    excelFileName: 'test5.xls',
+    pdfUrl: '/assets/invoices/test5.pdf',
+    excelUrl: '/assets/invoices/test5.xls'
   },
   {
-    id: 1004,
-    companyId: 24,
-    jobId: 28,
-    invoiceTypeId: 1,
-    invoiceNumber: 'Primary string',
-    alternateCompanyName: 'Alchem-e Labs',
-    statementDate: new Date('2024-03-08'),
-    pdfFileName: 'invoice-1004.pdf',
-    productId: 25,
-    customField1: 'Cell string',
-    customField2: 'Cell string',
-    customField3: 'Cell string',
-    customField4: 'Cell string',
-    siteId: 3,
-    billingClientNumber: 'BC-415',
-    excelFileName: 'invoice-1004.xlsx'
+    id: 96,
+    siteId: 10,
+    site: 'Atlanta Office',
+    billingClientNumber: '1111C',
+    invoiceDescription: 'CCo',
+    invoiceNumber: '12345C',
+    statementDate: new Date('2021-10-12'),
+    pdfFileName: 'test5.pdf',
+    excelFileName: 'test5.xls',
+    pdfUrl: '/assets/invoices/test5.pdf',
+    excelUrl: '/assets/invoices/test5.xls'
   },
   {
-    id: 1005,
-    companyId: 24,
-    jobId: 31,
-    invoiceTypeId: 2,
-    invoiceNumber: 'Primary string',
-    alternateCompanyName: 'Alchem-e Labs',
-    statementDate: new Date('2024-03-09'),
-    pdfFileName: 'invoice-1005.pdf',
-    productId: 29,
-    customField1: 'Cell string',
-    customField2: 'Cell string',
-    customField3: 'Cell string',
-    customField4: 'Cell string',
-    siteId: 3,
-    billingClientNumber: 'BC-420',
-    excelFileName: 'invoice-1005.xlsx'
+    id: 97,
+    siteId: 10,
+    site: 'Atlanta Office',
+    billingClientNumber: '1111C',
+    invoiceDescription: 'CCo',
+    invoiceNumber: '12345C',
+    statementDate: new Date('2021-10-12'),
+    pdfFileName: 'test5.pdf',
+    excelFileName: 'test5.xls',
+    pdfUrl: '/assets/invoices/test5.pdf',
+    excelUrl: '/assets/invoices/test5.xls'
   },
   {
-    id: 1006,
-    companyId: 24,
-    jobId: 33,
-    invoiceTypeId: 3,
-    invoiceNumber: 'Primary string',
-    alternateCompanyName: 'Alchem-e Labs',
-    statementDate: new Date('2024-03-10'),
-    pdfFileName: 'invoice-1006.pdf',
-    productId: 31,
-    customField1: 'Cell string',
-    customField2: 'Cell string',
-    customField3: 'Cell string',
-    customField4: 'Cell string',
-    siteId: 3,
-    billingClientNumber: 'BC-428',
-    excelFileName: 'invoice-1006.xlsx'
+    id: 98,
+    siteId: 10,
+    site: 'Atlanta Office',
+    billingClientNumber: '1111C',
+    invoiceDescription: 'CCo',
+    invoiceNumber: '12345C',
+    statementDate: new Date('2021-10-12'),
+    pdfFileName: 'test5.pdf',
+    excelFileName: 'test5.xls',
+    pdfUrl: '/assets/invoices/test5.pdf',
+    excelUrl: '/assets/invoices/test5.xls'
+  }
+];
+
+const JOBS: Job[] = [
+  {
+    id: 1544,
+    invoiceId: 94,
+    invoiceNumber: '12345D',
+    product: 'Credit Card Statements',
+    rejectedQuantity: 0,
+    mailedQuantity: 264,
+    printFileName: '11310_1231.pdf',
+    status: 'Job Approved',
+    shipCarrierId: '-',
+    shipMethodId: '-',
+    statusEventChangedBy: 'Ops Team',
+    statusEventDate: '2022-11-14 07:24:03 EST',
+    pdfFileName: '11310_1231.pdf'
   },
   {
-    id: 1007,
-    companyId: 24,
-    jobId: 35,
-    invoiceTypeId: 1,
-    invoiceNumber: 'Primary string',
-    alternateCompanyName: 'Alchem-e Labs',
-    statementDate: new Date('2024-03-11'),
-    pdfFileName: 'invoice-1007.pdf',
-    productId: 33,
-    customField1: 'Cell string',
-    customField2: 'Cell string',
-    customField3: 'Cell string',
-    customField4: 'Cell string',
-    siteId: 3,
-    billingClientNumber: 'BC-435',
-    excelFileName: 'invoice-1007.xlsx'
+    id: 1416,
+    invoiceId: 94,
+    invoiceNumber: '12345D',
+    product: 'Credit Card Statements',
+    rejectedQuantity: 0,
+    mailedQuantity: 0,
+    printFileName: '11308_1129.pdf',
+    status: 'Job Approved',
+    shipCarrierId: '-',
+    shipMethodId: '-',
+    statusEventChangedBy: 'Ops Team',
+    statusEventDate: '2022-11-14 05:27:31 EST',
+    pdfFileName: '11308_1129.pdf'
   },
   {
-    id: 1008,
-    companyId: 24,
-    jobId: 36,
-    invoiceTypeId: 2,
-    invoiceNumber: 'Primary string',
-    alternateCompanyName: 'Alchem-e Labs',
-    statementDate: new Date('2024-03-12'),
-    pdfFileName: 'invoice-1008.pdf',
-    productId: 36,
-    customField1: 'Cell string',
-    customField2: 'Cell string',
-    customField3: 'Cell string',
-    customField4: 'Cell string',
-    siteId: 3,
-    billingClientNumber: 'BC-441',
-    excelFileName: 'invoice-1008.xlsx'
+    id: 1417,
+    invoiceId: 93,
+    invoiceNumber: '12345C',
+    product: 'Credit Card Statements',
+    rejectedQuantity: 0,
+    mailedQuantity: 0,
+    printFileName: '11307_1128.pdf',
+    status: 'Job Approved',
+    shipCarrierId: '-',
+    shipMethodId: '-',
+    statusEventChangedBy: 'Ops Team',
+    statusEventDate: '2022-11-11 19:21:45 EST',
+    pdfFileName: '11307_1128.pdf'
+  }
+];
+
+const JOB_DETAILS: JobDetail[] = [
+  {
+    id: 1,
+    jobId: 1544,
+    status: 'Ready for Print',
+    optionId: '12131',
+    slaDate: '2022-11-17 07:24:51 EST',
+    printFileName: '11310_1231.pdf',
+    product: 'Credit - SMS',
+    rejectedQuantity: 0,
+    mailedQuantity: 64,
+    shipCarrierId: '-',
+    shipMethodId: '-',
+    statusEventChangedBy: '-',
+    statusEventDate: '2022-11-14 07:27:05 EST',
+    pdfFileName: '11310_1231.pdf'
+  },
+  {
+    id: 2,
+    jobId: 1544,
+    status: 'Rejected',
+    optionId: '12130',
+    slaDate: '2022-11-18 07:24:31 EST',
+    printFileName: '11310_12130.pdf',
+    product: 'Credit - Print',
+    rejectedQuantity: 0,
+    mailedQuantity: 100,
+    shipCarrierId: '-',
+    shipMethodId: '-',
+    statusEventChangedBy: '-',
+    statusEventDate: '2022-11-14 07:27:05 EST',
+    pdfFileName: '11310_12130.pdf'
+  },
+  {
+    id: 3,
+    jobId: 1417,
+    status: 'Ready for Print',
+    optionId: '12129',
+    slaDate: '2022-11-17 07:24:23 EST',
+    printFileName: '11307_12129.pdf',
+    product: 'Credit - Email',
+    rejectedQuantity: 0,
+    mailedQuantity: 100,
+    shipCarrierId: '-',
+    shipMethodId: '-',
+    statusEventChangedBy: '-',
+    statusEventDate: '2022-11-14 07:27:05 EST',
+    pdfFileName: '11307_12129.pdf'
   }
 ];
 
@@ -215,13 +192,45 @@ const INVOICES: Invoice[] = [
   styleUrl: './app.scss'
 })
 export class App {
-  readonly navItems = NAV_ITEMS;
-  readonly invoiceTypes = INVOICE_TYPES;
-  readonly invoices = INVOICES;
-  readonly filters: FilterChip[] = [
-    { label: 'Filter name', value: 'All' },
-    { label: 'Filter name', value: 'All' },
-    { label: 'Filter name', value: 'All' },
-    { label: 'Filter name', value: 'All' }
-  ];
+  readonly invoices = [...INVOICES].sort((left, right) =>
+    (left.billingClientNumber ?? '').localeCompare(right.billingClientNumber ?? '')
+  );
+  readonly jobs = JOBS;
+  readonly jobDetails = JOB_DETAILS;
+
+  selectedInvoiceId: number | null = this.invoices[0]?.id ?? null;
+  selectedJobId: number | null = null;
+
+  constructor() {
+    const initialJob = this.filteredJobs[0];
+    this.selectedJobId = initialJob?.id ?? null;
+  }
+
+  get selectedInvoice(): Invoice | undefined {
+    return this.invoices.find((invoice) => invoice.id === this.selectedInvoiceId);
+  }
+
+  get filteredJobs(): Job[] {
+    if (!this.selectedInvoiceId) {
+      return [];
+    }
+    return this.jobs.filter((job) => job.invoiceId === this.selectedInvoiceId);
+  }
+
+  get filteredJobDetails(): JobDetail[] {
+    if (!this.selectedJobId) {
+      return [];
+    }
+    return this.jobDetails.filter((detail) => detail.jobId === this.selectedJobId);
+  }
+
+  selectInvoice(invoice: Invoice): void {
+    this.selectedInvoiceId = invoice.id ?? null;
+    const nextJob = this.filteredJobs[0];
+    this.selectedJobId = nextJob?.id ?? null;
+  }
+
+  selectJob(job: Job): void {
+    this.selectedJobId = job.id;
+  }
 }
