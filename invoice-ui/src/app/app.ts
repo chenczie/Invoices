@@ -9,16 +9,6 @@ interface FilterChip {
   value: string;
 }
 
-const FILTER_FIELDS = [
-  'Site',
-  'Billing Client Number',
-  'Invoice Description',
-  'Invoice Number',
-  'Invoice Data',
-  'PDF',
-  'Spreadsheet Download'
-];
-
 const INVOICE_TYPES: InvoiceType[] = [
   {
     id: 1,
@@ -202,7 +192,6 @@ const INVOICES: Invoice[] = [
 export class App {
   readonly invoiceTypes = INVOICE_TYPES;
   readonly invoices = INVOICES;
-  readonly filterFields = FILTER_FIELDS;
   readonly filters: FilterChip[] = [
     { label: 'Filter name', value: 'All' },
     { label: 'Filter name', value: 'All' },

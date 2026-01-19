@@ -80,26 +80,12 @@
           </button>
         </div>
 
-        <div class="filter-controls">
-          <label class="filter-field">
-            <span>Filter by</span>
-            <select aria-label="Filter by header field">
-              <option *ngFor="let field of filterFields" [value]="field">
-                {{ field }}
-              </option>
-            </select>
-          </label>
-          <label class="filter-input">
-            <span class="visually-hidden">Filter value</span>
-            <input type="text" placeholder="Enter value" aria-label="Filter value" />
-          </label>
-          <button class="add-filter" type="button">
-            <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-              <path d="M2 3h12L9.5 8v5l-3 1V8L2 3z" />
-            </svg>
-            Add Filter
-          </button>
-        </div>
+        <button class="add-filter" type="button">
+          <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M2 3h12L9.5 8v5l-3 1V8L2 3z" />
+          </svg>
+          Add Filter
+        </button>
       </section>
 
       <section class="table-card">

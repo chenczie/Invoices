@@ -303,38 +303,6 @@
   cursor: pointer;
 }
 
-.filter-controls {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.filter-field {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: #6b7a90;
-}
-
-.filter-field select {
-  border: 1px solid #d7deea;
-  border-radius: 6px;
-  padding: 4px 8px;
-  font-size: 12px;
-  background: #ffffff;
-  color: #1f2a44;
-}
-
-.filter-input input {
-  border: 1px solid #d7deea;
-  border-radius: 6px;
-  padding: 4px 8px;
-  font-size: 12px;
-  background: #ffffff;
-  color: #1f2a44;
-}
 
 .table-card {
   margin-top: 12px;
@@ -450,16 +418,6 @@ tbody tr:hover {
   pointer-events: none;
 }
 
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  border: 0;
-}
 
 .table-footer {
   display: flex;
