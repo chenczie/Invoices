@@ -7,9 +7,9 @@
     "types": []
   },
   "include": [
-    "src/**/*.ts"
+    "apps/invoice-management/src/**/*.ts"
   ],
   "exclude": [
-    "src/**/*.spec.ts"
+    "apps/invoice-management/src/**/*.spec.ts"
   ]
 }

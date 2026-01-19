@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
+import { INVOICE_MANAGEMENT_LIBRARY } from '@invoice-management/invoice-management';
+
 import { Invoice } from './models/invoice.model';
 import { InvoiceType } from './models/invoice-type.model';
 
@@ -271,6 +273,7 @@ export class App {
   readonly rowActions = ROW_ACTIONS;
   readonly invoiceColumns = INVOICE_COLUMNS;
   readonly columnFieldOptions = COLUMN_FIELD_OPTIONS;
+  readonly libraryTag = INVOICE_MANAGEMENT_LIBRARY;
   readonly filters: FilterChip[] = [
     { label: 'Filter name', value: 'All' },
     { label: 'Filter name', value: 'All' },
