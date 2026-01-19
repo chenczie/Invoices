@@ -532,6 +532,16 @@ tbody tr:hover {
   padding: 16px 18px;
 }
 
+.details-panel {
+  position: fixed;
+  top: 52px;
+  right: 0;
+  height: calc(100vh - 52px);
+  overflow: auto;
+  box-shadow: -12px 0 24px rgba(15, 28, 46, 0.08);
+  z-index: 4;
+}
+
 .column-panel {
   width: 360px;
 }
