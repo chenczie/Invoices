@@ -26,8 +26,7 @@
   <div class="body">
     <main class="content">
       <section class="page-header">
-        <div class="page-actions">
-          <span class="invoice-count">{{ invoices.length }} Invoices</span>
+        <div class="page-actions-left">
           <button class="action-link" type="button">
             <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
               <path d="M4 3v10M8 3v10M12 3v10" />
@@ -48,6 +47,9 @@
             </svg>
             Refresh
           </button>
+        </div>
+        <div class="page-actions-right">
+          <span class="invoice-count">{{ invoices.length }} Invoices</span>
         </div>
       </section>
 
@@ -117,6 +119,7 @@
               </th>
               <th class="col-pdf">PDF</th>
               <th class="col-xls">Spreadsheet Download</th>
+              <th class="col-actions">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -168,6 +171,26 @@
                 >
                   <span>{{ invoice.excelFileName || '—' }}</span>
                 </a>
+              </td>
+              <td class="col-actions">
+                <div class="row-menu">
+                  <button class="row-menu-trigger" type="button" aria-haspopup="menu">
+                    Menu
+                    <svg class="chevron-icon" viewBox="0 0 16 16" aria-hidden="true">
+                      <path d="M4 6l4 4 4-4" />
+                    </svg>
+                  </button>
+                  <div class="row-menu-list" role="menu">
+                    <button
+                      class="row-menu-item"
+                      type="button"
+                      role="menuitem"
+                      *ngFor="let action of rowActions"
+                    >
+                      {{ action }}
+                    </button>
+                  </div>
+                </div>
               </td>
             </tr>
           </tbody>
