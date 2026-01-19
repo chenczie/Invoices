@@ -209,9 +209,19 @@ export class App {
     { label: 'Filter name', value: 'All' }
   ];
   selectedInvoice: Invoice | null = null;
+  detailInvoice: Invoice | null = null;
 
   selectInvoice(invoice: Invoice): void {
     this.selectedInvoice = invoice;
+  }
+
+  openDetails(invoice: Invoice): void {
+    this.selectedInvoice = invoice;
+    this.detailInvoice = invoice;
+  }
+
+  closeDetails(): void {
+    this.detailInvoice = null;
   }
 
   getInvoiceDescription(invoice: Invoice): string {
