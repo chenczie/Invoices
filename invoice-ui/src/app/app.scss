@@ -332,6 +332,17 @@ th {
   font-weight: 600;
 }
 
+th.col-view,
+th.col-actions {
+  z-index: 3;
+  box-shadow: -6px 0 8px rgba(15, 28, 46, 0.06);
+}
+
+td.col-view,
+td.col-actions {
+  box-shadow: -6px 0 8px rgba(15, 28, 46, 0.04);
+}
+
 td {
   color: #2a3547;
 }
@@ -373,11 +384,19 @@ tbody tr:hover {
 .col-view {
   width: 56px;
   text-align: center;
+  position: sticky;
+  right: 56px;
+  background: #ffffff;
+  z-index: 1;
 }
 
 .col-actions {
   width: 56px;
   text-align: right;
+  position: sticky;
+  right: 0;
+  background: #ffffff;
+  z-index: 1;
 }
 
 .invoice-link {
