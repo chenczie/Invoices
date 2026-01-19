@@ -6,27 +6,27 @@
     </div>
     <div class="topbar-actions">
       <span class="last-login">Last Login: Wed, Apr 18, 2023, 4:55pm</span>
-      <button class="icon-button" type="button" aria-label="Notifications">
+      <button class="icon-button btn-icon" type="button" aria-label="Notifications">
         <span class="badge">99+</span>
         <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
           <path d="M12 10V7a4 4 0 0 0-8 0v3L2.5 12h11L12 10z" />
           <path d="M6 12a2 2 0 0 0 4 0" />
         </svg>
       </button>
-      <button class="icon-button" type="button" aria-label="Refresh">
+      <button class="icon-button btn-icon" type="button" aria-label="Refresh">
         <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
           <path d="M13 8a5 5 0 1 1-2-4" />
           <path d="M11 2h3v3" />
         </svg>
       </button>
-      <div class="avatar-circle">JD</div>
+      <div class="avatar avatar-sm avatar-warning">JD</div>
     </div>
   </header>
 
   <div class="body">
     <aside class="sidebar">
       <div class="profile">
-        <div class="profile-avatar">JD</div>
+        <div class="avatar avatar-sm avatar-primary">JD</div>
         <div class="profile-name">Name</div>
         <button class="profile-action" type="button" aria-label="Open profile menu">
           <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
@@ -95,18 +95,20 @@
       </section>
 
       <section class="filter-row">
-        <label class="search">
-          <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-            <circle cx="7" cy="7" r="4"></circle>
-            <path d="M10.5 10.5L14 14" />
-          </svg>
-          <input type="search" placeholder="Search" aria-label="Search invoices" />
-        </label>
+        <div class="input-group input-group-sm adornment search-group">
+          <span class="input-group-text" aria-hidden="true">
+            <svg class="icon" viewBox="0 0 16 16">
+              <circle cx="7" cy="7" r="4"></circle>
+              <path d="M10.5 10.5L14 14" />
+            </svg>
+          </span>
+          <input class="form-control" type="search" placeholder="Search" aria-label="Search invoices" />
+        </div>
 
         <div class="filter-chip" *ngFor="let filter of filters">
           <span class="filter-label">{{ filter.label }}</span>
           <span class="filter-value">{{ filter.value }}</span>
-          <button class="chip-close" type="button" aria-label="Remove filter">
+          <button class="chip-close btn-icon" type="button" aria-label="Remove filter">
             x
           </button>
         </div>
@@ -124,7 +126,7 @@
           <thead>
             <tr>
               <th class="col-select">
-                <input type="checkbox" aria-label="Select all invoices" />
+                <input class="form-check-input" type="checkbox" aria-label="Select all invoices" />
               </th>
               <th class="col-invoice">Invoice Number</th>
               <th>
@@ -151,10 +153,10 @@
           <tbody>
             <tr *ngFor="let invoice of invoices">
               <td>
-                <input type="checkbox" aria-label="Select invoice" />
+                <input class="form-check-input" type="checkbox" aria-label="Select invoice" />
               </td>
               <td class="col-invoice">
-                <button class="invoice-link" type="button">
+                <button class="invoice-link hover-text-decoration-underline" type="button">
                   {{ invoice.invoiceNumber }}
                 </button>
               </td>
@@ -162,7 +164,7 @@
               <td>{{ invoice.customField2 }}</td>
               <td>{{ invoice.customField3 }}</td>
               <td class="col-actions">
-                <button class="kebab" type="button" aria-label="More actions">
+                <button class="kebab btn-icon" type="button" aria-label="More actions">
                   <span class="kebab-dot"></span>
                   <span class="kebab-dot"></span>
                   <span class="kebab-dot"></span>

@@ -1,4 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import './assets/fonts/Roboto';
+@import './assets/fonts/Roboto_Condensed';
+@import './assets/fonts/Segoe_UI';
+@import './variables';
+@import './mixins';
+@import './utilities';
+@import 'bootstrap/scss/bootstrap';
 
 * {
   box-sizing: border-box;
@@ -6,12 +12,464 @@
 
 body {
   margin: 0;
-  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
-  background: #f4f7fb;
-  color: #1f2a44;
+  font-family: $font-family-sans-serif;
+  background: $body-bg;
+  color: $body-color;
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font-family: inherit;
+}
+
+:root {
+  --#{$prefix}font-condensed: #{inspect($font-family-condensed)};
+  --#{$prefix}gap: 0.5rem;
+  --#{$prefix}gap-sm: 0.25rem;
+  --#{$prefix}gap-xl: 0.75rem;
+  --alcheme-dark-rgb: #{red($dark)}, #{green($dark)}, #{blue($dark)};
+  --alcheme-danger: #{$danger};
+  --alcheme-gray-200: #{$gray-200};
+  @media (min-width: 992px) {
+    .modal-lg,
+    .modal-xl {
+      &.modal-900 {
+        --alcheme-modal-width: 900px;
+      }
+      &.modal-1000 {
+        --alcheme-modal-width: 1000px;
+      }
+    }
+  }
+}
+
+// Avatar component
+$avatar-border-radius: 50%;
+$avatar-border-width: $border-width;
+$avatar-sizes: (
+  sm: (
+    34px,
+    $font-size-base * 0.75
+  ),
+  md: (
+    52px,
+    $font-size-base
+  ),
+  lg: (
+    72px,
+    $font-size-lg
+  ),
+  xl: (
+    92px,
+    $font-size-base * 2
+  )
+);
+
+.avatar {
+  --#{$prefix}avatar-bg: #{$gray-100};
+  --#{$prefix}avatar-size: #{nth(map-get($avatar-sizes, sm), 1)};
+  --#{$prefix}avatar-font-size: #{nth(map-get($avatar-sizes, sm), 2)};
+  --#{$prefix}avatar-color: inherit;
+  --#{$prefix}avatar-border-color: #{$gray-300};
+  --#{$prefix}avatar-border: #{$avatar-border-width} solid var(--#{$prefix}avatar-border-color);
+  --#{$prefix}avatar-border-radius: #{$avatar-border-radius};
+
+  color: var(--#{$prefix}avatar-color);
+  background-color: var(--#{$prefix}avatar-bg);
+  border: var(--#{$prefix}avatar-border);
+  border-radius: var(--#{$prefix}avatar-border-radius);
+  width: var(--#{$prefix}avatar-size);
+  height: var(--#{$prefix}avatar-size);
+  line-height: calc(var(--#{$prefix}avatar-size) - 2px);
+  font-size: var(--#{$prefix}avatar-font-size);
+  display: inline-block;
+  text-align: center;
+}
+
+@each $state, $value in $theme-colors {
+  .avatar-#{$state} {
+    --#{$prefix}avatar-color: #{color-contrast($value)};
+    --#{$prefix}avatar-bg: #{$value};
+    --#{$prefix}avatar-border-color: #{$value};
+  }
+}
+
+@each $state, $value in $avatar-sizes {
+  .avatar-#{$state} {
+    --#{$prefix}avatar-size: #{nth($value, 1)};
+    --#{$prefix}avatar-font-size: #{nth($value, 2)};
+  }
+}
+
+.avatar-primary {
+  --#{$prefix}avatar-color: #{$light};
+}
+
+.btn-primary {
+  --#{$prefix}btn-color: #{$light};
+  --#{$prefix}btn-hover-color: #{$light};
+  --#{$prefix}btn-disabled-color: #{$light};
+}
+
+// Input group with adornment component
+.input-group {
+  &[class*='adornment'] {
+    overflow: hidden;
+    border: $input-border-width solid $input-group-addon-border-color;
+    @include border-radius($input-border-radius);
+    @include transition($input-transition);
+    &:has(input:focus):has(select:focus) {
+      @if $enable-shadows {
+        @include box-shadow($input-box-shadow, $input-focus-box-shadow);
+      } @else {
+        // Avoid using mixin so we can pass custom focus shadow properly
+        box-shadow: $input-focus-box-shadow;
+      }
+    }
+    &:has(input:disabled):has(select:disabled) {
+      color: $input-disabled-color;
+      background-color: $input-disabled-bg;
+      border-color: $input-disabled-border-color;
+      // iOS fix for unreadable disabled content; see https://github.com/twbs/bootstrap/issues/11655.
+      opacity: 1;
+    }
+
+    & > * {
+      padding: 0 $spacer * 0.5;
+    }
+
+    input,
+    select {
+      border-width: 0;
+      padding: 0;
+      padding-top: $input-padding-y;
+      padding-bottom: $input-padding-y;
+      &:focus {
+        box-shadow: none;
+      }
+      &:disabled {
+        color: initial;
+        background-color: initial;
+        border-color: initial;
+      }
+      &:first-child {
+        padding-left: $spacer;
+      }
+      &:last-child {
+        padding-right: $spacer;
+      }
+    }
+    & > :not(input):not(select) {
+      background-color: white;
+      border-width: 0;
+      padding: $input-padding-y;
+      font-size: 0;
+      & > * {
+        vertical-align: middle;
+        @include font-size($input-font-size * 1.375);
+      }
+    }
+    &.input-group-lg {
+      input,
+      select {
+        padding-top: $input-padding-y-lg;
+        padding-bottom: $input-padding-y-lg;
+      }
+      @include border-radius($input-border-radius-lg);
+      & > :not(input):not(select) {
+        padding: $input-padding-y-lg;
+        & > * {
+          @include font-size($input-font-size-lg * 1.375);
+        }
+      }
+    }
+    &.input-group-sm {
+      input,
+      select {
+        padding-top: $input-padding-y-sm;
+        padding-bottom: $input-padding-y-sm;
+      }
+      @include border-radius($input-border-radius-sm);
+      & > :not(input):not(select) {
+        padding: $input-padding-y-sm;
+        & > * {
+          @include font-size($input-font-size-sm * 1.375);
+        }
+      }
+    }
+
+    @each $state, $data in $form-validation-states {
+      $color: map-get($data, color);
+      $icon: map-get($data, icon);
+      $focus-box-shadow: 0 0 $input-btn-focus-blur $input-focus-width
+        rgba($color, $input-btn-focus-color-opacity);
+      @include form-validation-state-selector($state) {
+        border-color: $color;
+
+        @if $enable-validation-icons {
+          padding-right: $input-height-inner;
+          background-image: escape-svg($icon);
+          background-repeat: no-repeat;
+          background-position: right $input-height-inner-quarter center;
+          background-size: $input-height-inner-half $input-height-inner-half;
+        }
+
+        &:has(input:focus),
+        &:has(select:focus) {
+          border-color: $color;
+          box-shadow: $focus-box-shadow;
+        }
+      }
+    }
+  }
+}
+
+//Button icon
+.btn-icon {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: $spacer * 0.25;
+}
+
+@each $color, $value in $theme-colors {
+  .btn-glass-#{$color} {
+    @include button-glass-variant($value);
+    &.frosted {
+      --#{$prefix}btn-bg: var(--#{$prefix}btn-hover-bg);
+    }
+  }
+}
+
+ngb-pagination ul.pagination {
+  margin: 0;
+  li.page-item {
+    margin: 0 1px;
+    a {
+      font-size: 0.7875rem;
+      padding: 0.25rem 0.5rem;
+      line-height: 1.5;
+    }
+    &.active {
+      a {
+        border-radius: 0.25rem;
+      }
+    }
+  }
+}
+
+table {
+  width: auto;
+  border-collapse: separate;
+  border-spacing: 0;
+  & > thead {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+  th:first-child,
+  td:first-child {
+    position: sticky;
+    left: 0;
+  }
+  th:first-child {
+    z-index: 3;
+  }
+  td:first-child {
+    z-index: 1;
+  }
+  th:last-child,
+  td:last-child {
+    position: sticky;
+    right: 0;
+  }
+  td:last-child {
+    z-index: 1;
+  }
+  td {
+    word-break: break-word;
+    // overflow: hidden;
+    // white-space: nowrap;
+    // text-overflow: ellipsis;
+  }
+}
+
+.nav-tabs {
+  .nav-item {
+    .nav-link {
+      border-bottom: 2px solid transparent;
+      &:hover {
+        background-color: rgba(var(--alcheme-dark-rgb), 0.15);
+        border-bottom-color: $dark;
+      }
+    }
+    &.show .nav-link,
+    .nav-link.active {
+      border-bottom-color: $primary;
+      font-weight: bold;
+    }
+  }
+}
+
+.hover-text-decoration-underline {
+  &:hover {
+    text-decoration: underline !important;
+  }
+}
+
+.animate-flip {
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+  &.flip-x {
+    transform: rotateY(180deg);
+  }
+  &.flip-y {
+    transform: rotateX(180deg);
+  }
+}
+
+.form-check:has(> .form-check-input-lg) {
+  min-height: 1.55em;
+  .form-check-input-lg {
+    width: 1.25em;
+    height: 1.25em;
+  }
+  label {
+    vertical-align: middle;
+  }
+}
+
+/*
+---------------------------------------
+Insert to index.html of the application
+---------------------------------------
+<div class="loader-container">
+  <div class="loader">
+    <div class="loader--dot"></div>
+    <div class="loader--dot"></div>
+    <div class="loader--dot"></div>
+    <div class="loader--dot"></div>
+    <div class="loader--dot"></div>
+    <div class="loader--dot"></div>
+    <div class="loader--text"></div>
+  </div>
+</div>
+*/
+
+$loader--width: 250px;
+$loader-dot--size: 20px;
+
+.loader-container {
+  height: 100vh;
+  width: 100vw;
+  font-family: $font-family-sans-serif;
+}
+.loader {
+  height: $loader-dot--size;
+  width: $loader--width;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+
+  &--dot {
+    animation: {
+      name: loader;
+      timing-function: ease-in-out;
+      duration: 3s;
+      iteration-count: infinite;
+    }
+    height: $loader-dot--size;
+    width: $loader-dot--size;
+    border-radius: 100%;
+    background-color: black;
+    position: absolute;
+    border: 2px solid white;
+
+    &:first-child {
+      background-color: #3bbdcc;
+      animation-delay: 0.5s;
+    }
+    &:nth-child(2) {
+      background-color: #d65945;
+      animation-delay: 0.4s;
+    }
+    &:nth-child(3) {
+      background-color: #e5ac1c;
+      animation-delay: 0.3s;
+    }
+    &:nth-child(4) {
+      background-color: #29a460;
+      animation-delay: 0.2s;
+    }
+    &:nth-child(5) {
+      background-color: #207cd1;
+      animation-delay: 0.1s;
+    }
+    &:nth-child(6) {
+      background-color: #fbef5a;
+      animation-delay: 0s;
+    }
+  }
+  &--text {
+    position: absolute;
+    top: 200%;
+    left: 0;
+    right: 0;
+    width: 4rem;
+    margin: auto;
+
+    &:after {
+      content: 'Loading';
+      font-weight: bold;
+      animation: {
+        name: loading-text;
+        duration: 3s;
+        iteration-count: infinite;
+      }
+    }
+  }
+}
+@keyframes loader {
+  15% {
+    transform: translateX(0);
+  }
+  45% {
+    transform: translateX($loader--width - $loader-dot--size);
+  }
+  65% {
+    transform: translateX($loader--width - $loader-dot--size);
+  }
+  95% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes loading-text {
+  0% {
+    content: 'Loading';
+  }
+  25% {
+    content: 'Loading.';
+  }
+  50% {
+    content: 'Loading..';
+  }
+  75% {
+    content: 'Loading...';
+  }
+}
+
+label.required {
+  &:after {
+    color: var(--alcheme-danger);
+    content: ' *';
+  }
+}
+.bg-200 {
+  background-color: var(--alcheme-gray-200) !important;
 }
