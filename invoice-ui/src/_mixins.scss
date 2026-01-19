@@ -1,8 +1,0 @@
-@mixin button-glass-variant($color) {
-  --#{$prefix}btn-color: #{$color};
-  --#{$prefix}btn-bg: #{rgba($color, 0.08)};
-  --#{$prefix}btn-border-color: #{rgba($color, 0.2)};
-  --#{$prefix}btn-hover-color: #{$color};
-  --#{$prefix}btn-hover-bg: #{rgba($color, 0.16)};
-  --#{$prefix}btn-hover-border-color: #{rgba($color, 0.3)};
-}
