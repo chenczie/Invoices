@@ -24,74 +24,43 @@
   </header>
 
   <div class="body">
-    <aside class="sidebar">
-      <div class="profile">
-        <div class="profile-avatar">JD</div>
-        <div class="profile-name">Name</div>
-        <button class="profile-action" type="button" aria-label="Open profile menu">
-          <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-            <path d="M4 6l4 4 4-4" />
-          </svg>
-        </button>
-      </div>
-      <nav class="nav">
-        <button
-          class="nav-item"
-          *ngFor="let item of navItems"
-          type="button"
-          [class.active]="item.active"
-        >
-          <span class="nav-dot" aria-hidden="true"></span>
-          <span>{{ item.label }}</span>
-        </button>
-      </nav>
-    </aside>
-
     <main class="content">
       <section class="page-header">
-        <div class="page-title">
-          <h1>Invoice</h1>
-        </div>
         <div class="page-actions">
-          <button class="action-link" type="button">
-            <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-              <path d="M8 2v7m0 0l3-3m-3 3L5 6" />
-              <path d="M3 13h10" />
-            </svg>
-            Download XL
-          </button>
-          <button class="action-link" type="button">
-            <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-              <path d="M8 11V4m0 0L5 7m3-3l3 3" />
-              <path d="M3 12v2h10v-2" />
-            </svg>
-            Export
-          </button>
+          <span class="invoice-count">{{ invoices.length }} Invoices</span>
           <button class="action-link" type="button">
             <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
               <path d="M4 3v10M8 3v10M12 3v10" />
             </svg>
-            Column Preferences
+            Columns
           </button>
-          <button class="action-link disabled" type="button" aria-disabled="true">
+          <button class="action-link" type="button">
             <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
               <path d="M8 2v7m0 0l3-3m-3 3L5 6" />
               <path d="M3 13h10" />
             </svg>
-            Download Selected Files as XL
+            Download
           </button>
-          <button class="action-link disabled" type="button" aria-disabled="true">
+          <button class="action-link" type="button">
             <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-              <path d="M4 5h8l-1 9H5L4 5z" />
-              <path d="M6 5V3h4v2" />
+              <path d="M13 8a5 5 0 1 1-2-4" />
+              <path d="M11 2h3v3" />
             </svg>
-            Delete
+            Refresh
           </button>
         </div>
       </section>
 
-      <section class="meta-row">
-        <span class="invoice-count">{{ invoices.length }} Invoices</span>
+      <section class="breadcrumb-row" *ngIf="selectedInvoice as selectedInvoice">
+        <button class="breadcrumb-link" type="button">Jobs</button>
+        <span class="breadcrumb-separator">/</span>
+        <button class="breadcrumb-link" type="button">
+          Job {{ selectedInvoice.jobId || '—' }}
+        </button>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">Job Detail</span>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">Invoice {{ selectedInvoice.invoiceNumber || '—' }}</span>
       </section>
 
       <section class="filter-row">
@@ -111,12 +80,26 @@
           </button>
         </div>
 
-        <button class="add-filter" type="button">
-          <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-            <path d="M2 3h12L9.5 8v5l-3 1V8L2 3z" />
-          </svg>
-          Add filter
-        </button>
+        <div class="filter-controls">
+          <label class="filter-field">
+            <span>Filter by</span>
+            <select aria-label="Filter by header field">
+              <option *ngFor="let field of filterFields" [value]="field">
+                {{ field }}
+              </option>
+            </select>
+          </label>
+          <label class="filter-input">
+            <span class="visually-hidden">Filter value</span>
+            <input type="text" placeholder="Enter value" aria-label="Filter value" />
+          </label>
+          <button class="add-filter" type="button">
+            <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M2 3h12L9.5 8v5l-3 1V8L2 3z" />
+            </svg>
+            Add Filter
+          </button>
+        </div>
       </section>
 
       <section class="table-card">
@@ -148,7 +131,6 @@
               </th>
               <th class="col-pdf">PDF</th>
               <th class="col-xls">Spreadsheet Download</th>
-              <th class="col-events">View Events</th>
               <th class="col-actions"></th>
             </tr>
           </thead>
@@ -161,7 +143,7 @@
               <td class="col-client">{{ invoice.billingClientNumber || '—' }}</td>
               <td class="col-description">{{ getInvoiceDescription(invoice) }}</td>
               <td class="col-invoice">
-                <button class="invoice-link" type="button">
+                <button class="invoice-link" type="button" (click)="selectInvoice(invoice)">
                   {{ invoice.invoiceNumber || '—' }}
                 </button>
                 <div class="invoice-subline" *ngIf="invoice.jobId || invoice.companyId">
@@ -181,44 +163,26 @@
                 <a
                   class="file-link"
                   [class.disabled]="!invoice.pdfFileName"
-                  [attr.href]="getPdfUrl(invoice)"
+                  [attr.href]="invoice.pdfFileName ? getPdfUrl(invoice) : null"
                   [attr.aria-disabled]="!invoice.pdfFileName"
                   [attr.title]="invoice.pdfFileName || 'PDF unavailable'"
                   target="_blank"
                   rel="noopener"
                 >
-                  <svg class="file-icon" viewBox="0 0 16 16" aria-hidden="true">
-                    <path d="M4 1.5h5l3 3V14a.5.5 0 0 1-.5.5H4.5A.5.5 0 0 1 4 14V1.5z" />
-                    <path d="M9 1.5V5h3" />
-                  </svg>
-                  PDF
+                  <span>{{ invoice.pdfFileName || '—' }}</span>
                 </a>
               </td>
               <td class="col-xls">
                 <a
                   class="file-link"
                   [class.disabled]="!invoice.excelFileName"
-                  [attr.href]="getExcelUrl(invoice)"
+                  [attr.href]="invoice.excelFileName ? getExcelUrl(invoice) : null"
                   [attr.download]="invoice.excelFileName || null"
                   [attr.aria-disabled]="!invoice.excelFileName"
                   [attr.title]="invoice.excelFileName || 'Spreadsheet unavailable'"
                 >
-                  <svg class="file-icon" viewBox="0 0 16 16" aria-hidden="true">
-                    <path d="M4 1.5h5l3 3V14a.5.5 0 0 1-.5.5H4.5A.5.5 0 0 1 4 14V1.5z" />
-                    <path d="M9 1.5V5h3" />
-                    <path d="M5.5 7.5l5 5m0-5l-5 5" />
-                  </svg>
-                  XLS
+                  <span>{{ invoice.excelFileName || '—' }}</span>
                 </a>
-              </td>
-              <td class="col-events">
-                <button class="event-link" type="button" aria-label="View events">
-                  <svg class="event-icon" viewBox="0 0 16 16" aria-hidden="true">
-                    <path d="M8 3v5l3 2" />
-                    <circle cx="8" cy="8" r="5" />
-                  </svg>
-                  View
-                </button>
               </td>
               <td class="col-actions">
                 <div class="row-menu">
@@ -228,22 +192,11 @@
                     <span class="kebab-dot"></span>
                   </button>
                   <div class="row-menu-list" role="menu">
-                    <div class="row-menu-header">Tasks</div>
                     <button
                       class="row-menu-item"
                       type="button"
                       role="menuitem"
-                      *ngFor="let action of taskActions"
-                    >
-                      {{ action }}
-                    </button>
-                    <div class="row-menu-divider" role="separator"></div>
-                    <div class="row-menu-header">User Actions</div>
-                    <button
-                      class="row-menu-item"
-                      type="button"
-                      role="menuitem"
-                      *ngFor="let action of userActions"
+                      *ngFor="let action of rowActions"
                     >
                       {{ action }}
                     </button>

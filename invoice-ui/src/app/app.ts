@@ -4,27 +4,29 @@ import { Component } from '@angular/core';
 import { Invoice } from './models/invoice.model';
 import { InvoiceType } from './models/invoice-type.model';
 
-interface NavItem {
-  label: string;
-  active?: boolean;
-}
-
 interface FilterChip {
   label: string;
   value: string;
 }
 
-const NAV_ITEMS: NavItem[] = [{ label: 'Invoice', active: true }];
-
-const TASK_ACTIONS = [
-  'Invoice Admin',
+const ROW_ACTIONS = [
   'Invoices',
   'Edit Invoice',
+  'Associated File',
   'View Details',
-  'Comment'
+  'Comment',
+  'Audit History'
 ];
 
-const USER_ACTIONS = ['Associated Files', 'Audit History'];
+const FILTER_FIELDS = [
+  'Site',
+  'Billing Client Number',
+  'Invoice Description',
+  'Invoice Number',
+  'Invoice Data',
+  'PDF',
+  'Spreadsheet Download'
+];
 
 const INVOICE_TYPES: InvoiceType[] = [
   {
@@ -59,10 +61,10 @@ const INVOICES: Invoice[] = [
     companyId: 24,
     jobId: 18,
     invoiceTypeId: 1,
-    invoiceNumber: 'Primary string',
+    invoiceNumber: '2026-01191224',
     alternateCompanyName: 'Alchem-e Labs',
     statementDate: new Date('2024-03-05'),
-    pdfFileName: 'invoice-1001.pdf',
+    pdfFileName: '2026-01191224.pdf',
     productId: 11,
     customField1: 'Cell string',
     customField2: 'Cell string',
@@ -70,17 +72,17 @@ const INVOICES: Invoice[] = [
     customField4: 'Cell string',
     siteId: 3,
     billingClientNumber: 'BC-391',
-    excelFileName: 'invoice-1001.xlsx'
+    excelFileName: '2026-01191224.xlsx'
   },
   {
     id: 1002,
     companyId: 24,
     jobId: 22,
     invoiceTypeId: 2,
-    invoiceNumber: 'Primary string',
+    invoiceNumber: '2026-01191225',
     alternateCompanyName: 'Alchem-e Labs',
     statementDate: new Date('2024-03-06'),
-    pdfFileName: 'invoice-1002.pdf',
+    pdfFileName: '2026-01191225.pdf',
     productId: 14,
     customField1: 'Cell string',
     customField2: 'Cell string',
@@ -88,17 +90,17 @@ const INVOICES: Invoice[] = [
     customField4: 'Cell string',
     siteId: 3,
     billingClientNumber: 'BC-402',
-    excelFileName: 'invoice-1002.xlsx'
+    excelFileName: '2026-01191225.xlsx'
   },
   {
     id: 1003,
     companyId: 24,
     jobId: 25,
     invoiceTypeId: 3,
-    invoiceNumber: 'Primary string',
+    invoiceNumber: '2026-01191226',
     alternateCompanyName: 'Alchem-e Labs',
     statementDate: new Date('2024-03-07'),
-    pdfFileName: 'invoice-1003.pdf',
+    pdfFileName: '2026-01191226.pdf',
     productId: 21,
     customField1: 'Cell string',
     customField2: 'Cell string',
@@ -106,17 +108,17 @@ const INVOICES: Invoice[] = [
     customField4: 'Cell string',
     siteId: 3,
     billingClientNumber: 'BC-410',
-    excelFileName: 'invoice-1003.xlsx'
+    excelFileName: '2026-01191226.xlsx'
   },
   {
     id: 1004,
     companyId: 24,
     jobId: 28,
     invoiceTypeId: 1,
-    invoiceNumber: 'Primary string',
+    invoiceNumber: '2026-01191227',
     alternateCompanyName: 'Alchem-e Labs',
     statementDate: new Date('2024-03-08'),
-    pdfFileName: 'invoice-1004.pdf',
+    pdfFileName: '2026-01191227.pdf',
     productId: 25,
     customField1: 'Cell string',
     customField2: 'Cell string',
@@ -124,17 +126,17 @@ const INVOICES: Invoice[] = [
     customField4: 'Cell string',
     siteId: 3,
     billingClientNumber: 'BC-415',
-    excelFileName: 'invoice-1004.xlsx'
+    excelFileName: '2026-01191227.xlsx'
   },
   {
     id: 1005,
     companyId: 24,
     jobId: 31,
     invoiceTypeId: 2,
-    invoiceNumber: 'Primary string',
+    invoiceNumber: '2026-01191228',
     alternateCompanyName: 'Alchem-e Labs',
     statementDate: new Date('2024-03-09'),
-    pdfFileName: 'invoice-1005.pdf',
+    pdfFileName: '2026-01191228.pdf',
     productId: 29,
     customField1: 'Cell string',
     customField2: 'Cell string',
@@ -142,17 +144,17 @@ const INVOICES: Invoice[] = [
     customField4: 'Cell string',
     siteId: 3,
     billingClientNumber: 'BC-420',
-    excelFileName: 'invoice-1005.xlsx'
+    excelFileName: '2026-01191228.xlsx'
   },
   {
     id: 1006,
     companyId: 24,
     jobId: 33,
     invoiceTypeId: 3,
-    invoiceNumber: 'Primary string',
+    invoiceNumber: '2026-01191229',
     alternateCompanyName: 'Alchem-e Labs',
     statementDate: new Date('2024-03-10'),
-    pdfFileName: 'invoice-1006.pdf',
+    pdfFileName: '2026-01191229.pdf',
     productId: 31,
     customField1: 'Cell string',
     customField2: 'Cell string',
@@ -160,17 +162,17 @@ const INVOICES: Invoice[] = [
     customField4: 'Cell string',
     siteId: 3,
     billingClientNumber: 'BC-428',
-    excelFileName: 'invoice-1006.xlsx'
+    excelFileName: '2026-01191229.xlsx'
   },
   {
     id: 1007,
     companyId: 24,
     jobId: 35,
     invoiceTypeId: 1,
-    invoiceNumber: 'Primary string',
+    invoiceNumber: '2026-01191230',
     alternateCompanyName: 'Alchem-e Labs',
     statementDate: new Date('2024-03-11'),
-    pdfFileName: 'invoice-1007.pdf',
+    pdfFileName: '2026-01191230.pdf',
     productId: 33,
     customField1: 'Cell string',
     customField2: 'Cell string',
@@ -178,17 +180,17 @@ const INVOICES: Invoice[] = [
     customField4: 'Cell string',
     siteId: 3,
     billingClientNumber: 'BC-435',
-    excelFileName: 'invoice-1007.xlsx'
+    excelFileName: '2026-01191230.xlsx'
   },
   {
     id: 1008,
     companyId: 24,
     jobId: 36,
     invoiceTypeId: 2,
-    invoiceNumber: 'Primary string',
+    invoiceNumber: '2026-01191231',
     alternateCompanyName: 'Alchem-e Labs',
     statementDate: new Date('2024-03-12'),
-    pdfFileName: 'invoice-1008.pdf',
+    pdfFileName: '2026-01191231.pdf',
     productId: 36,
     customField1: 'Cell string',
     customField2: 'Cell string',
@@ -196,7 +198,7 @@ const INVOICES: Invoice[] = [
     customField4: 'Cell string',
     siteId: 3,
     billingClientNumber: 'BC-441',
-    excelFileName: 'invoice-1008.xlsx'
+    excelFileName: '2026-01191231.xlsx'
   }
 ];
 
@@ -207,17 +209,21 @@ const INVOICES: Invoice[] = [
   styleUrl: './app.scss'
 })
 export class App {
-  readonly navItems = NAV_ITEMS;
   readonly invoiceTypes = INVOICE_TYPES;
   readonly invoices = INVOICES;
-  readonly taskActions = TASK_ACTIONS;
-  readonly userActions = USER_ACTIONS;
+  readonly rowActions = ROW_ACTIONS;
+  readonly filterFields = FILTER_FIELDS;
   readonly filters: FilterChip[] = [
     { label: 'Filter name', value: 'All' },
     { label: 'Filter name', value: 'All' },
     { label: 'Filter name', value: 'All' },
     { label: 'Filter name', value: 'All' }
   ];
+  selectedInvoice: Invoice | null = null;
+
+  selectInvoice(invoice: Invoice): void {
+    this.selectedInvoice = invoice;
+  }
 
   getInvoiceDescription(invoice: Invoice): string {
     if (invoice.invoiceTypeId == null) {
