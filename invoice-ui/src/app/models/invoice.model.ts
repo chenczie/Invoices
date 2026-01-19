@@ -15,5 +15,6 @@ export interface Invoice {
   customField4?: string | null;
   siteId?: number | null;
   billingClientNumber?: string | null;
+  externalIdentifier?: string | null;
   excelFileName?: string | null;
 }

@@ -344,20 +344,24 @@ tbody tr:hover {
   width: 36px;
 }
 
-.col-site {
-  min-width: 90px;
+.col-default {
+  min-width: 120px;
 }
 
-.col-client {
+.col-medium {
   min-width: 170px;
 }
 
-.col-description {
-  min-width: 180px;
+.col-wide {
+  min-width: 220px;
 }
 
-.col-date {
-  min-width: 120px;
+.col-invoice-number {
+  min-width: 160px;
+}
+
+.col-statement-date {
+  min-width: 140px;
 }
 
 .col-pdf,
@@ -521,11 +525,15 @@ tbody tr:hover {
   background: #f1f5fb;
 }
 
-.details-panel {
+.side-panel {
   width: 320px;
   background: #ffffff;
   border-left: 1px solid #e4e9f3;
   padding: 16px 18px;
+}
+
+.column-panel {
+  width: 360px;
 }
 
 .details-header {
@@ -592,6 +600,97 @@ tbody tr:hover {
 .details-link.disabled {
   color: #a2afc2;
   pointer-events: none;
+}
+
+.column-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: calc(100vh - 180px);
+  overflow: auto;
+}
+
+.column-settings-header {
+  display: grid;
+  grid-template-columns: 18px 1fr 1fr 24px 24px;
+  gap: 8px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #6b7a90;
+}
+
+.column-settings-row {
+  display: grid;
+  grid-template-columns: 18px 1fr 1fr 24px 24px;
+  gap: 8px;
+  align-items: center;
+}
+
+.column-handle {
+  display: grid;
+  grid-template-columns: repeat(2, 4px);
+  grid-template-rows: repeat(3, 4px);
+  gap: 2px;
+}
+
+.column-handle-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #c6d2ea;
+}
+
+.column-select,
+.column-input {
+  border: 1px solid #d7deea;
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-size: 12px;
+  background: #ffffff;
+  color: #1f2a44;
+}
+
+.column-toggle,
+.column-remove {
+  border: none;
+  background: transparent;
+  color: #1f6fd5;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+}
+
+.column-toggle-icon,
+.column-remove-icon {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.column-add {
+  border: none;
+  background: transparent;
+  color: #1f6fd5;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 6px 0;
+}
+
+.column-add-icon {
+  font-size: 16px;
+  line-height: 1;
 }
 
 .visually-hidden {

@@ -27,7 +27,7 @@
     <main class="content">
       <section class="page-header">
         <div class="page-actions-left">
-          <button class="action-link" type="button">
+          <button class="action-link" type="button" (click)="openColumnSettings()">
             <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
               <rect x="1.5" y="2" width="5" height="12" rx="1" />
               <rect x="9.5" y="2" width="5" height="12" rx="1" />
@@ -98,28 +98,19 @@
               <th class="col-select">
                 <input type="checkbox" aria-label="Select all invoices" />
               </th>
-              <th class="col-site">Site</th>
-              <th class="col-client">
-                Billing Client Number
-                <svg class="sort-icon" viewBox="0 0 16 16" aria-hidden="true">
-                  <path d="M4 9l4-4 4 4" />
-                </svg>
-              </th>
-              <th class="col-description">Invoice Description</th>
-              <th class="col-invoice">
-                Invoice Number
-                <svg class="sort-icon" viewBox="0 0 16 16" aria-hidden="true">
-                  <path d="M4 7l4 4 4-4" />
-                </svg>
-              </th>
-              <th class="col-date">
-                Invoice Data
-                <svg class="sort-icon" viewBox="0 0 16 16" aria-hidden="true">
-                  <path d="M4 9l4-4 4 4" />
-                </svg>
-              </th>
-              <th class="col-pdf">PDF</th>
-              <th class="col-xls">Spreadsheet Download</th>
+              <ng-container *ngFor="let column of invoiceColumns">
+                <th *ngIf="column.visible" [class]="getColumnClass(column.field)">
+                  {{ column.label }}
+                  <svg
+                    *ngIf="isSortable(column.field)"
+                    class="sort-icon"
+                    viewBox="0 0 16 16"
+                    aria-hidden="true"
+                  >
+                    <path d="M4 9l4-4 4 4" />
+                  </svg>
+                </th>
+              </ng-container>
               <th class="col-view">
                 <span class="visually-hidden">View Details</span>
               </th>
@@ -133,51 +124,57 @@
               <td>
                 <input type="checkbox" aria-label="Select invoice" />
               </td>
-              <td class="col-site">{{ getSiteLabel(invoice) }}</td>
-              <td class="col-client">{{ invoice.billingClientNumber || '—' }}</td>
-              <td class="col-description">{{ getInvoiceDescription(invoice) }}</td>
-              <td class="col-invoice">
-                <button class="invoice-link" type="button" (click)="selectInvoice(invoice)">
-                  {{ invoice.invoiceNumber || '—' }}
-                </button>
-                <div class="invoice-subline" *ngIf="invoice.jobId || invoice.companyId">
-                  <button class="invoice-sub-link" type="button" *ngIf="invoice.jobId">
-                    Job {{ invoice.jobId }}
-                  </button>
-                  <span class="sub-divider" *ngIf="invoice.jobId && invoice.companyId">•</span>
-                  <button class="invoice-sub-link" type="button" *ngIf="invoice.companyId">
-                    Company {{ invoice.companyId }}
-                  </button>
-                </div>
-              </td>
-              <td class="col-date">
-                {{ invoice.statementDate ? (invoice.statementDate | date: 'MM/dd/yyyy') : '—' }}
-              </td>
-              <td class="col-pdf">
-                <a
-                  class="file-link"
-                  [class.disabled]="!invoice.pdfFileName"
-                  [attr.href]="invoice.pdfFileName ? getPdfUrl(invoice) : null"
-                  [attr.aria-disabled]="!invoice.pdfFileName"
-                  [attr.title]="invoice.pdfFileName || 'PDF unavailable'"
-                  target="_blank"
-                  rel="noopener"
-                >
-                  <span>{{ invoice.pdfFileName || '—' }}</span>
-                </a>
-              </td>
-              <td class="col-xls">
-                <a
-                  class="file-link"
-                  [class.disabled]="!invoice.excelFileName"
-                  [attr.href]="invoice.excelFileName ? getExcelUrl(invoice) : null"
-                  [attr.download]="invoice.excelFileName || null"
-                  [attr.aria-disabled]="!invoice.excelFileName"
-                  [attr.title]="invoice.excelFileName || 'Spreadsheet unavailable'"
-                >
-                  <span>{{ invoice.excelFileName || '—' }}</span>
-                </a>
-              </td>
+              <ng-container *ngFor="let column of invoiceColumns">
+                <td *ngIf="column.visible" [class]="getColumnClass(column.field)">
+                  <ng-container [ngSwitch]="column.field">
+                    <ng-container *ngSwitchCase="'InvoiceNumber'">
+                      <button class="invoice-link" type="button" (click)="selectInvoice(invoice)">
+                        {{ invoice.invoiceNumber || '—' }}
+                      </button>
+                      <div class="invoice-subline" *ngIf="invoice.jobId || invoice.companyId">
+                        <button class="invoice-sub-link" type="button" *ngIf="invoice.jobId">
+                          Job {{ invoice.jobId }}
+                        </button>
+                        <span class="sub-divider" *ngIf="invoice.jobId && invoice.companyId">•</span>
+                        <button class="invoice-sub-link" type="button" *ngIf="invoice.companyId">
+                          Company {{ invoice.companyId }}
+                        </button>
+                      </div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'StatementDate'">
+                      {{ invoice.statementDate ? (invoice.statementDate | date: 'MM/dd/yyyy') : '—' }}
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'PdfFileName'">
+                      <a
+                        class="file-link"
+                        [class.disabled]="!invoice.pdfFileName"
+                        [attr.href]="invoice.pdfFileName ? getPdfUrl(invoice) : null"
+                        [attr.aria-disabled]="!invoice.pdfFileName"
+                        [attr.title]="invoice.pdfFileName || 'PDF unavailable'"
+                        target="_blank"
+                        rel="noopener"
+                      >
+                        <span>{{ invoice.pdfFileName || '—' }}</span>
+                      </a>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'ExcelFileName'">
+                      <a
+                        class="file-link"
+                        [class.disabled]="!invoice.excelFileName"
+                        [attr.href]="invoice.excelFileName ? getExcelUrl(invoice) : null"
+                        [attr.download]="invoice.excelFileName || null"
+                        [attr.aria-disabled]="!invoice.excelFileName"
+                        [attr.title]="invoice.excelFileName || 'Spreadsheet unavailable'"
+                      >
+                        <span>{{ invoice.excelFileName || '—' }}</span>
+                      </a>
+                    </ng-container>
+                    <ng-container *ngSwitchDefault>
+                      {{ getColumnValue(invoice, column.field) }}
+                    </ng-container>
+                  </ng-container>
+                </td>
+              </ng-container>
               <td class="col-view">
                 <button
                   class="view-button"
@@ -253,7 +250,64 @@
         </div>
       </section>
     </main>
-    <aside class="details-panel" *ngIf="detailInvoice as detailInvoice">
+    <aside class="side-panel column-panel" *ngIf="showColumnSettings">
+      <div class="details-header">
+        <div>
+          <h2 class="details-title">Column Settings</h2>
+          <span class="details-subtitle">Configure table columns</span>
+        </div>
+        <button
+          class="details-close"
+          type="button"
+          aria-label="Close column settings"
+          (click)="closeColumnSettings()"
+        >
+          <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M4 4l8 8M12 4l-8 8" />
+          </svg>
+        </button>
+      </div>
+      <div class="column-settings">
+        <div class="column-settings-header">
+          <span class="visually-hidden">Reorder</span>
+          <span>Field</span>
+          <span>Name</span>
+          <span class="visually-hidden">Visible</span>
+          <span class="visually-hidden">Remove</span>
+        </div>
+        <div class="column-settings-row" *ngFor="let column of invoiceColumns">
+          <span class="column-handle" aria-hidden="true">
+            <span class="column-handle-dot"></span>
+            <span class="column-handle-dot"></span>
+            <span class="column-handle-dot"></span>
+            <span class="column-handle-dot"></span>
+            <span class="column-handle-dot"></span>
+            <span class="column-handle-dot"></span>
+          </span>
+          <select class="column-select" [value]="column.field" aria-label="Column field">
+            <option *ngFor="let field of columnFieldOptions" [value]="field">
+              {{ field }}
+            </option>
+          </select>
+          <input class="column-input" type="text" [value]="column.label" aria-label="Column name" />
+          <button class="column-toggle" type="button" [attr.aria-pressed]="column.visible">
+            <svg class="column-toggle-icon" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M3.5 8l3 3 6-6" />
+            </svg>
+          </button>
+          <button class="column-remove" type="button" aria-label="Remove column">
+            <svg class="column-remove-icon" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M5 5l6 6M11 5l-6 6" />
+            </svg>
+          </button>
+        </div>
+        <button class="column-add" type="button">
+          <span class="column-add-icon">+</span>
+          Add Column
+        </button>
+      </div>
+    </aside>
+    <aside class="side-panel details-panel" *ngIf="detailInvoice as detailInvoice">
       <div class="details-header">
         <div>
           <h2 class="details-title">{{ detailInvoice.invoiceNumber || 'Invoice' }}</h2>
@@ -266,59 +320,46 @@
         </button>
       </div>
       <div class="details-section">
-        <div class="details-row">
-          <span class="details-label">Site</span>
-          <span class="details-value">{{ getSiteLabel(detailInvoice) }}</span>
-        </div>
-        <div class="details-row">
-          <span class="details-label">Billing Client Number</span>
-          <span class="details-value">{{ detailInvoice.billingClientNumber || '—' }}</span>
-        </div>
-        <div class="details-row">
-          <span class="details-label">Invoice Description</span>
-          <span class="details-value">{{ getInvoiceDescription(detailInvoice) }}</span>
-        </div>
-        <div class="details-row">
-          <span class="details-label">Invoice Number</span>
-          <span class="details-value">{{ detailInvoice.invoiceNumber || '—' }}</span>
-        </div>
-        <div class="details-row">
-          <span class="details-label">Invoice Data</span>
-          <span class="details-value">
-            {{ detailInvoice.statementDate ? (detailInvoice.statementDate | date: 'MM/dd/yyyy') : '—' }}
-          </span>
-        </div>
-        <div class="details-row">
-          <span class="details-label">PDF</span>
-          <a
-            class="details-link"
-            [class.disabled]="!detailInvoice.pdfFileName"
-            [attr.href]="detailInvoice.pdfFileName ? getPdfUrl(detailInvoice) : null"
-            target="_blank"
-            rel="noopener"
-          >
-            {{ detailInvoice.pdfFileName || '—' }}
-          </a>
-        </div>
-        <div class="details-row">
-          <span class="details-label">Spreadsheet</span>
-          <a
-            class="details-link"
-            [class.disabled]="!detailInvoice.excelFileName"
-            [attr.href]="detailInvoice.excelFileName ? getExcelUrl(detailInvoice) : null"
-            [attr.download]="detailInvoice.excelFileName || null"
-          >
-            {{ detailInvoice.excelFileName || '—' }}
-          </a>
-        </div>
-        <div class="details-row">
-          <span class="details-label">Job ID</span>
-          <span class="details-value">{{ detailInvoice.jobId || '—' }}</span>
-        </div>
-        <div class="details-row">
-          <span class="details-label">Company ID</span>
-          <span class="details-value">{{ detailInvoice.companyId || '—' }}</span>
-        </div>
+        <ng-container *ngFor="let column of invoiceColumns">
+          <div class="details-row" *ngIf="column.visible">
+            <span class="details-label">{{ column.label }}</span>
+            <ng-container [ngSwitch]="column.field">
+              <ng-container *ngSwitchCase="'StatementDate'">
+                <span class="details-value">
+                  {{
+                    detailInvoice.statementDate
+                      ? (detailInvoice.statementDate | date: 'MM/dd/yyyy')
+                      : '—'
+                  }}
+                </span>
+              </ng-container>
+              <ng-container *ngSwitchCase="'PdfFileName'">
+                <a
+                  class="details-link"
+                  [class.disabled]="!detailInvoice.pdfFileName"
+                  [attr.href]="detailInvoice.pdfFileName ? getPdfUrl(detailInvoice) : null"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  {{ detailInvoice.pdfFileName || '—' }}
+                </a>
+              </ng-container>
+              <ng-container *ngSwitchCase="'ExcelFileName'">
+                <a
+                  class="details-link"
+                  [class.disabled]="!detailInvoice.excelFileName"
+                  [attr.href]="detailInvoice.excelFileName ? getExcelUrl(detailInvoice) : null"
+                  [attr.download]="detailInvoice.excelFileName || null"
+                >
+                  {{ detailInvoice.excelFileName || '—' }}
+                </a>
+              </ng-container>
+              <ng-container *ngSwitchDefault>
+                <span class="details-value">{{ getColumnValue(detailInvoice, column.field) }}</span>
+              </ng-container>
+            </ng-container>
+          </div>
+        </ng-container>
       </div>
     </aside>
   </div>
