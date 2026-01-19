@@ -178,7 +178,7 @@
 .page-header {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 16px;
 }
 
@@ -397,11 +397,6 @@ tbody tr:hover {
   text-align: left;
 }
 
-.col-actions {
-  width: 64px;
-  text-align: right;
-}
-
 .invoice-link {
   border: none;
   background: transparent;
@@ -455,46 +450,6 @@ tbody tr:hover {
   pointer-events: none;
 }
 
-.row-menu {
-  position: relative;
-  display: inline-flex;
-  justify-content: flex-end;
-}
-
-.row-menu-list {
-  position: absolute;
-  top: calc(100% + 6px);
-  right: 0;
-  min-width: 190px;
-  background: #ffffff;
-  border: 1px solid #e4e9f3;
-  border-radius: 8px;
-  padding: 6px 0;
-  box-shadow: 0 6px 16px rgba(15, 28, 46, 0.08);
-  display: none;
-  z-index: 3;
-}
-
-.row-menu:hover .row-menu-list,
-.row-menu:focus-within .row-menu-list {
-  display: block;
-}
-
-.row-menu-item {
-  width: 100%;
-  border: none;
-  background: transparent;
-  text-align: left;
-  padding: 6px 12px;
-  font-size: 12px;
-  color: #1f2a44;
-  cursor: pointer;
-}
-
-.row-menu-item:hover {
-  background: #f1f5fb;
-}
-
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -504,24 +459,6 @@ tbody tr:hover {
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   border: 0;
-}
-
-.kebab {
-  border: none;
-  background: transparent;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  cursor: pointer;
-  padding: 4px 6px;
-  margin-left: auto;
-}
-
-.kebab-dot {
-  width: 3px;
-  height: 3px;
-  background: #6b7a90;
-  border-radius: 50%;
 }
 
 .table-footer {
