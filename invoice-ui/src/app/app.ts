@@ -14,31 +14,7 @@ interface FilterChip {
   value: string;
 }
 
-const NAV_ITEMS: NavItem[] = [
-  { label: 'Dashboard' },
-  { label: 'Jobs Dashboard' },
-  { label: 'Production Dashboard' },
-  { label: 'Files' },
-  { label: 'Analytics/Reporting' },
-  { label: 'Doc Writer' },
-  { label: 'Templates/Orders' },
-  { label: 'Print Queue' },
-  { label: 'Department Dashboard' },
-  { label: 'Scan Station' },
-  { label: 'Inventory' },
-  { label: 'Escrow' },
-  { label: 'Approval View' },
-  { label: 'Consumer' },
-  { label: 'Asset Management' },
-  { label: 'Document Search' },
-  { label: 'Reprint Records' },
-  { label: 'Invoice', active: true },
-  { label: 'Form Submission' },
-  { label: 'Engine Monitor' },
-  { label: 'Workflow' },
-  { label: 'Scripts' },
-  { label: 'Admin' }
-];
+const NAV_ITEMS: NavItem[] = [{ label: 'Invoice', active: true }];
 
 const INVOICE_TYPES: InvoiceType[] = [
   {
