@@ -27,10 +27,6 @@
     <main class="content">
       <section class="page-header">
         <div class="page-actions-left">
-          <button class="action-button action-primary" type="button">
-            <span class="action-icon">+</span>
-            New
-          </button>
           <button class="action-link" type="button" (click)="openColumnSettings()">
             <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
               <rect x="1.5" y="2" width="5" height="12" rx="1" />
@@ -71,11 +67,6 @@
           </svg>
           <input type="search" placeholder="Search" aria-label="Search invoices" />
         </label>
-
-        <div class="status-toggle" role="group" aria-label="Status filter">
-          <button class="status-option is-active" type="button">Enabled</button>
-          <button class="status-option" type="button">Disabled</button>
-        </div>
 
         <button class="add-filter" type="button">
           <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
