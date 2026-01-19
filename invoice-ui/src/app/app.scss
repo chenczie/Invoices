@@ -413,20 +413,46 @@ tbody tr:hover {
   text-align: center;
 }
 
-.col-id {
-  min-width: 80px;
+.col-default {
+  min-width: 120px;
 }
 
-.col-company {
+.col-medium {
+  min-width: 170px;
+}
+
+.col-wide {
   min-width: 220px;
 }
 
-.col-parent {
-  min-width: 180px;
+.col-invoice-number {
+  min-width: 160px;
 }
 
-.col-email {
-  min-width: 240px;
+.col-statement-date {
+  min-width: 140px;
+}
+
+.col-file {
+  min-width: 200px;
+  text-align: left;
+}
+
+.file-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1f6fd5;
+  text-decoration: none;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.file-link.disabled {
+  color: #a2afc2;
+  pointer-events: none;
 }
 
 .col-view {

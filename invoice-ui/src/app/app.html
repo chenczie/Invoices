@@ -132,10 +132,38 @@
               <ng-container *ngFor="let column of invoiceColumns">
                 <td *ngIf="column.visible" [class]="getColumnClass(column.field)">
                   <ng-container [ngSwitch]="column.field">
-                    <ng-container *ngSwitchCase="'CompanyName'">
+                    <ng-container *ngSwitchCase="'InvoiceNumber'">
                       <button class="company-link" type="button" (click)="selectInvoice(invoice)">
-                        {{ invoice.alternateCompanyName || '—' }}
+                        {{ invoice.invoiceNumber || '—' }}
                       </button>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'StatementDate'">
+                      {{ invoice.statementDate ? (invoice.statementDate | date: 'MM/dd/yyyy') : '—' }}
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'PdfFileName'">
+                      <a
+                        class="file-link"
+                        [class.disabled]="!invoice.pdfFileName"
+                        [attr.href]="invoice.pdfFileName ? getPdfUrl(invoice) : null"
+                        [attr.aria-disabled]="!invoice.pdfFileName"
+                        [attr.title]="invoice.pdfFileName || 'PDF unavailable'"
+                        target="_blank"
+                        rel="noopener"
+                      >
+                        <span>{{ invoice.pdfFileName || '—' }}</span>
+                      </a>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'ExcelFileName'">
+                      <a
+                        class="file-link"
+                        [class.disabled]="!invoice.excelFileName"
+                        [attr.href]="invoice.excelFileName ? getExcelUrl(invoice) : null"
+                        [attr.download]="invoice.excelFileName || null"
+                        [attr.aria-disabled]="!invoice.excelFileName"
+                        [attr.title]="invoice.excelFileName || 'Spreadsheet unavailable'"
+                      >
+                        <span>{{ invoice.excelFileName || '—' }}</span>
+                      </a>
                     </ng-container>
                     <ng-container *ngSwitchDefault>
                       {{ getColumnValue(invoice, column.field) }}

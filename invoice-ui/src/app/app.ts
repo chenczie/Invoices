@@ -25,22 +25,50 @@ const ROW_ACTIONS = [
 ];
 
 const INVOICE_COLUMNS: InvoiceColumn[] = [
-  { field: 'Id', label: 'Id', visible: true },
-  { field: 'CompanyName', label: 'Company Name', visible: true },
-  { field: 'ParentCompany', label: 'Parent Company', visible: true },
-  { field: 'EmailFromEmail', label: 'Email (From Email)', visible: true }
+  { field: 'InvoiceId', label: 'InvoiceId', visible: true },
+  { field: 'CompanyId', label: 'CompanyId', visible: true },
+  { field: 'JobId', label: 'JobId', visible: true },
+  { field: 'InvoiceTypeId', label: 'InvoiceTypeId', visible: true },
+  { field: 'AlternateClientNumber', label: 'AlternateClientNumber', visible: true },
+  { field: 'InvoiceNumber', label: 'InvoiceNumber', visible: true },
+  { field: 'AlternateCompanyName', label: 'AlternateCompanyName', visible: true },
+  { field: 'StatementDate', label: 'StatementDate', visible: true },
+  { field: 'PdfFileName', label: 'PdfFileName', visible: true },
+  { field: 'ProductId', label: 'ProductId', visible: true },
+  { field: 'CustomField1', label: 'CustomField1', visible: true },
+  { field: 'CustomField2', label: 'CustomField2', visible: true },
+  { field: 'CustomField3', label: 'CustomField3', visible: true },
+  { field: 'CustomField4', label: 'CustomField4', visible: true },
+  { field: 'SiteId', label: 'SiteId', visible: true },
+  { field: 'BillingClientNumber', label: 'BillingClientNumber', visible: true },
+  { field: 'ExternalIdentifier', label: 'ExternalIdentifier', visible: true },
+  { field: 'ExcelFileName', label: 'ExcelFileName', visible: true }
 ];
 
 const COLUMN_FIELD_OPTIONS = INVOICE_COLUMNS.map((column) => column.field);
 
 const COLUMN_CLASS_MAP: Record<string, string> = {
-  Id: 'col-id',
-  CompanyName: 'col-company',
-  ParentCompany: 'col-parent',
-  EmailFromEmail: 'col-email'
+  InvoiceId: 'col-default col-invoice-id',
+  CompanyId: 'col-default col-company-id',
+  JobId: 'col-default col-job-id',
+  InvoiceTypeId: 'col-default col-invoice-type-id',
+  AlternateClientNumber: 'col-medium col-alternate-client-number',
+  InvoiceNumber: 'col-invoice-number',
+  AlternateCompanyName: 'col-wide col-alternate-company-name',
+  StatementDate: 'col-statement-date',
+  PdfFileName: 'col-file col-pdf',
+  ProductId: 'col-default col-product-id',
+  CustomField1: 'col-default col-custom-field',
+  CustomField2: 'col-default col-custom-field',
+  CustomField3: 'col-default col-custom-field',
+  CustomField4: 'col-default col-custom-field',
+  SiteId: 'col-default col-site-id',
+  BillingClientNumber: 'col-medium col-billing-client-number',
+  ExternalIdentifier: 'col-medium col-external-identifier',
+  ExcelFileName: 'col-file col-xls'
 };
 
-const SORTABLE_FIELDS = new Set(['CompanyName']);
+const SORTABLE_FIELDS = new Set(['InvoiceId', 'BillingClientNumber', 'InvoiceNumber', 'StatementDate']);
 
 const INVOICE_TYPES: InvoiceType[] = [
   {
@@ -81,8 +109,8 @@ const INVOICES: Invoice[] = [
     statementDate: new Date('2024-03-05'),
     pdfFileName: '2026-01191224.pdf',
     productId: 11,
-    customField1: 'Chan Co',
-    customField2: 'billing@alchem-e.com',
+    customField1: 'Cell string',
+    customField2: 'Cell string',
     customField3: 'Cell string',
     customField4: 'Cell string',
     siteId: 3,
@@ -101,8 +129,8 @@ const INVOICES: Invoice[] = [
     statementDate: new Date('2024-03-06'),
     pdfFileName: '2026-01191225.pdf',
     productId: 14,
-    customField1: 'racami',
-    customField2: 'support@racami.com',
+    customField1: 'Cell string',
+    customField2: 'Cell string',
     customField3: 'Cell string',
     customField4: 'Cell string',
     siteId: 3,
@@ -121,8 +149,8 @@ const INVOICES: Invoice[] = [
     statementDate: new Date('2024-03-07'),
     pdfFileName: '2026-01191226.pdf',
     productId: 21,
-    customField1: 'Alchem-e',
-    customField2: 'production@alchem-e.com',
+    customField1: 'Cell string',
+    customField2: 'Cell string',
     customField3: 'Cell string',
     customField4: 'Cell string',
     siteId: 3,
@@ -141,8 +169,8 @@ const INVOICES: Invoice[] = [
     statementDate: new Date('2024-03-08'),
     pdfFileName: '2026-01191227.pdf',
     productId: 25,
-    customField1: 'Chan Co',
-    customField2: 'billing@alchem-e.com',
+    customField1: 'Cell string',
+    customField2: 'Cell string',
     customField3: 'Cell string',
     customField4: 'Cell string',
     siteId: 3,
@@ -161,8 +189,8 @@ const INVOICES: Invoice[] = [
     statementDate: new Date('2024-03-09'),
     pdfFileName: '2026-01191228.pdf',
     productId: 29,
-    customField1: 'racami',
-    customField2: 'support@racami.com',
+    customField1: 'Cell string',
+    customField2: 'Cell string',
     customField3: 'Cell string',
     customField4: 'Cell string',
     siteId: 3,
@@ -181,8 +209,8 @@ const INVOICES: Invoice[] = [
     statementDate: new Date('2024-03-10'),
     pdfFileName: '2026-01191229.pdf',
     productId: 31,
-    customField1: 'Alchem-e',
-    customField2: 'production@alchem-e.com',
+    customField1: 'Cell string',
+    customField2: 'Cell string',
     customField3: 'Cell string',
     customField4: 'Cell string',
     siteId: 3,
@@ -201,8 +229,8 @@ const INVOICES: Invoice[] = [
     statementDate: new Date('2024-03-11'),
     pdfFileName: '2026-01191230.pdf',
     productId: 33,
-    customField1: 'Chan Co',
-    customField2: 'billing@alchem-e.com',
+    customField1: 'Cell string',
+    customField2: 'Cell string',
     customField3: 'Cell string',
     customField4: 'Cell string',
     siteId: 3,
@@ -221,8 +249,8 @@ const INVOICES: Invoice[] = [
     statementDate: new Date('2024-03-12'),
     pdfFileName: '2026-01191231.pdf',
     productId: 36,
-    customField1: 'racami',
-    customField2: 'support@racami.com',
+    customField1: 'Cell string',
+    customField2: 'Cell string',
     customField3: 'Cell string',
     customField4: 'Cell string',
     siteId: 3,
@@ -286,14 +314,36 @@ export class App {
 
   getColumnValue(invoice: Invoice, field: string): string {
     switch (field) {
-      case 'Id':
+      case 'InvoiceId':
         return invoice.id?.toString() ?? '—';
-      case 'CompanyName':
+      case 'CompanyId':
+        return invoice.companyId?.toString() ?? '—';
+      case 'JobId':
+        return invoice.jobId?.toString() ?? '—';
+      case 'InvoiceTypeId':
+        return invoice.invoiceTypeId?.toString() ?? '—';
+      case 'AlternateClientNumber':
+        return invoice.alternateClientNumber ?? '—';
+      case 'InvoiceNumber':
+        return invoice.invoiceNumber ?? '—';
+      case 'AlternateCompanyName':
         return invoice.alternateCompanyName ?? '—';
-      case 'ParentCompany':
+      case 'ProductId':
+        return invoice.productId?.toString() ?? '—';
+      case 'CustomField1':
         return invoice.customField1 ?? '—';
-      case 'EmailFromEmail':
+      case 'CustomField2':
         return invoice.customField2 ?? '—';
+      case 'CustomField3':
+        return invoice.customField3 ?? '—';
+      case 'CustomField4':
+        return invoice.customField4 ?? '—';
+      case 'SiteId':
+        return invoice.siteId?.toString() ?? '—';
+      case 'BillingClientNumber':
+        return invoice.billingClientNumber ?? '—';
+      case 'ExternalIdentifier':
+        return invoice.externalIdentifier ?? '—';
       default:
         return '—';
     }
