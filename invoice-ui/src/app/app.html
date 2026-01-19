@@ -71,7 +71,7 @@
             <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
               <path d="M4 3v10M8 3v10M12 3v10" />
             </svg>
-            Columns
+            Column Preferences
           </button>
           <button class="action-link disabled" type="button" aria-disabled="true">
             <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
@@ -126,25 +126,29 @@
               <th class="col-select">
                 <input type="checkbox" aria-label="Select all invoices" />
               </th>
-              <th class="col-invoice">Invoice Number</th>
-              <th>
-                Column header
+              <th class="col-site">Site</th>
+              <th class="col-client">
+                Billing Client Number
                 <svg class="sort-icon" viewBox="0 0 16 16" aria-hidden="true">
                   <path d="M4 9l4-4 4 4" />
                 </svg>
               </th>
-              <th>
-                Column header
+              <th class="col-description">Invoice Description</th>
+              <th class="col-invoice">
+                Invoice Number
                 <svg class="sort-icon" viewBox="0 0 16 16" aria-hidden="true">
                   <path d="M4 7l4 4 4-4" />
                 </svg>
               </th>
-              <th>
-                Column header
+              <th class="col-date">
+                Invoice Data
                 <svg class="sort-icon" viewBox="0 0 16 16" aria-hidden="true">
                   <path d="M4 9l4-4 4 4" />
                 </svg>
               </th>
+              <th class="col-pdf">PDF</th>
+              <th class="col-xls">Spreadsheet Download</th>
+              <th class="col-events">View Events</th>
               <th class="col-actions"></th>
             </tr>
           </thead>
@@ -153,20 +157,98 @@
               <td>
                 <input type="checkbox" aria-label="Select invoice" />
               </td>
+              <td class="col-site">{{ getSiteLabel(invoice) }}</td>
+              <td class="col-client">{{ invoice.billingClientNumber || '—' }}</td>
+              <td class="col-description">{{ getInvoiceDescription(invoice) }}</td>
               <td class="col-invoice">
                 <button class="invoice-link" type="button">
-                  {{ invoice.invoiceNumber }}
+                  {{ invoice.invoiceNumber || '—' }}
+                </button>
+                <div class="invoice-subline" *ngIf="invoice.jobId || invoice.companyId">
+                  <button class="invoice-sub-link" type="button" *ngIf="invoice.jobId">
+                    Job {{ invoice.jobId }}
+                  </button>
+                  <span class="sub-divider" *ngIf="invoice.jobId && invoice.companyId">•</span>
+                  <button class="invoice-sub-link" type="button" *ngIf="invoice.companyId">
+                    Company {{ invoice.companyId }}
+                  </button>
+                </div>
+              </td>
+              <td class="col-date">
+                {{ invoice.statementDate ? (invoice.statementDate | date: 'MM/dd/yyyy') : '—' }}
+              </td>
+              <td class="col-pdf">
+                <a
+                  class="file-link"
+                  [class.disabled]="!invoice.pdfFileName"
+                  [attr.href]="getPdfUrl(invoice)"
+                  [attr.aria-disabled]="!invoice.pdfFileName"
+                  [attr.title]="invoice.pdfFileName || 'PDF unavailable'"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <svg class="file-icon" viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M4 1.5h5l3 3V14a.5.5 0 0 1-.5.5H4.5A.5.5 0 0 1 4 14V1.5z" />
+                    <path d="M9 1.5V5h3" />
+                  </svg>
+                  PDF
+                </a>
+              </td>
+              <td class="col-xls">
+                <a
+                  class="file-link"
+                  [class.disabled]="!invoice.excelFileName"
+                  [attr.href]="getExcelUrl(invoice)"
+                  [attr.download]="invoice.excelFileName || null"
+                  [attr.aria-disabled]="!invoice.excelFileName"
+                  [attr.title]="invoice.excelFileName || 'Spreadsheet unavailable'"
+                >
+                  <svg class="file-icon" viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M4 1.5h5l3 3V14a.5.5 0 0 1-.5.5H4.5A.5.5 0 0 1 4 14V1.5z" />
+                    <path d="M9 1.5V5h3" />
+                    <path d="M5.5 7.5l5 5m0-5l-5 5" />
+                  </svg>
+                  XLS
+                </a>
+              </td>
+              <td class="col-events">
+                <button class="event-link" type="button" aria-label="View events">
+                  <svg class="event-icon" viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M8 3v5l3 2" />
+                    <circle cx="8" cy="8" r="5" />
+                  </svg>
+                  View
                 </button>
               </td>
-              <td>{{ invoice.customField1 }}</td>
-              <td>{{ invoice.customField2 }}</td>
-              <td>{{ invoice.customField3 }}</td>
               <td class="col-actions">
-                <button class="kebab" type="button" aria-label="More actions">
-                  <span class="kebab-dot"></span>
-                  <span class="kebab-dot"></span>
-                  <span class="kebab-dot"></span>
-                </button>
+                <div class="row-menu">
+                  <button class="kebab" type="button" aria-label="More actions" aria-haspopup="menu">
+                    <span class="kebab-dot"></span>
+                    <span class="kebab-dot"></span>
+                    <span class="kebab-dot"></span>
+                  </button>
+                  <div class="row-menu-list" role="menu">
+                    <div class="row-menu-header">Tasks</div>
+                    <button
+                      class="row-menu-item"
+                      type="button"
+                      role="menuitem"
+                      *ngFor="let action of taskActions"
+                    >
+                      {{ action }}
+                    </button>
+                    <div class="row-menu-divider" role="separator"></div>
+                    <div class="row-menu-header">User Actions</div>
+                    <button
+                      class="row-menu-item"
+                      type="button"
+                      role="menuitem"
+                      *ngFor="let action of userActions"
+                    >
+                      {{ action }}
+                    </button>
+                  </div>
+                </div>
               </td>
             </tr>
           </tbody>

@@ -16,6 +16,16 @@ interface FilterChip {
 
 const NAV_ITEMS: NavItem[] = [{ label: 'Invoice', active: true }];
 
+const TASK_ACTIONS = [
+  'Invoice Admin',
+  'Invoices',
+  'Edit Invoice',
+  'View Details',
+  'Comment'
+];
+
+const USER_ACTIONS = ['Associated Files', 'Audit History'];
+
 const INVOICE_TYPES: InvoiceType[] = [
   {
     id: 1,
@@ -36,6 +46,12 @@ const INVOICE_TYPES: InvoiceType[] = [
     siteId: 2
   }
 ];
+
+const INVOICE_TYPE_MAP = new Map<number, InvoiceType>(
+  INVOICE_TYPES.flatMap((invoiceType) =>
+    invoiceType.id == null ? [] : ([[invoiceType.id, invoiceType]] as const)
+  )
+);
 
 const INVOICES: Invoice[] = [
   {
@@ -194,10 +210,47 @@ export class App {
   readonly navItems = NAV_ITEMS;
   readonly invoiceTypes = INVOICE_TYPES;
   readonly invoices = INVOICES;
+  readonly taskActions = TASK_ACTIONS;
+  readonly userActions = USER_ACTIONS;
   readonly filters: FilterChip[] = [
     { label: 'Filter name', value: 'All' },
     { label: 'Filter name', value: 'All' },
     { label: 'Filter name', value: 'All' },
     { label: 'Filter name', value: 'All' }
   ];
+
+  getInvoiceDescription(invoice: Invoice): string {
+    if (invoice.invoiceTypeId == null) {
+      return '—';
+    }
+    return INVOICE_TYPE_MAP.get(invoice.invoiceTypeId)?.invoiceTypeDescription ?? '—';
+  }
+
+  getSiteLabel(invoice: Invoice): string {
+    if (invoice.siteId == null) {
+      return '—';
+    }
+    return `Site ${invoice.siteId}`;
+  }
+
+  getPdfUrl(invoice: Invoice): string | null {
+    if (!invoice.pdfFileName) {
+      return null;
+    }
+    return `${this.getAssetDirectory(invoice)}/${invoice.pdfFileName}`;
+  }
+
+  getExcelUrl(invoice: Invoice): string | null {
+    if (!invoice.excelFileName) {
+      return null;
+    }
+    return `${this.getAssetDirectory(invoice)}/${invoice.excelFileName}`;
+  }
+
+  private getAssetDirectory(invoice: Invoice): string {
+    if (invoice.invoiceTypeId == null) {
+      return '/assets/invoices';
+    }
+    return INVOICE_TYPE_MAP.get(invoice.invoiceTypeId)?.assetDirectory ?? '/assets/invoices';
+  }
 }

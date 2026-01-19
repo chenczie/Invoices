@@ -317,8 +317,31 @@ tbody tr:hover {
   width: 36px;
 }
 
+.col-site {
+  min-width: 90px;
+}
+
+.col-client {
+  min-width: 170px;
+}
+
+.col-description {
+  min-width: 180px;
+}
+
+.col-date {
+  min-width: 120px;
+}
+
+.col-pdf,
+.col-xls,
+.col-events {
+  min-width: 120px;
+  text-align: center;
+}
+
 .col-actions {
-  width: 56px;
+  width: 64px;
   text-align: right;
 }
 
@@ -329,6 +352,135 @@ tbody tr:hover {
   font-weight: 600;
   cursor: pointer;
   padding: 0;
+}
+
+.invoice-subline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  font-size: 11px;
+  color: #6b7a90;
+}
+
+.invoice-sub-link {
+  border: none;
+  background: transparent;
+  color: #6b7a90;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.invoice-sub-link:hover {
+  color: #1f6fd5;
+  text-decoration: underline;
+}
+
+.sub-divider {
+  color: #c6d2ea;
+}
+
+.file-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1f6fd5;
+  text-decoration: none;
+}
+
+.file-link.disabled {
+  color: #a2afc2;
+  pointer-events: none;
+}
+
+.file-icon {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.event-link {
+  border: 1px solid #d7deea;
+  background: #ffffff;
+  color: #1f6fd5;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.event-icon {
+  width: 12px;
+  height: 12px;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.row-menu {
+  position: relative;
+  display: inline-flex;
+  justify-content: flex-end;
+}
+
+.row-menu-list {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 190px;
+  background: #ffffff;
+  border: 1px solid #e4e9f3;
+  border-radius: 8px;
+  padding: 6px 0;
+  box-shadow: 0 6px 16px rgba(15, 28, 46, 0.08);
+  display: none;
+  z-index: 3;
+}
+
+.row-menu:hover .row-menu-list,
+.row-menu:focus-within .row-menu-list {
+  display: block;
+}
+
+.row-menu-header {
+  padding: 6px 12px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #6b7a90;
+}
+
+.row-menu-item {
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: left;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: #1f2a44;
+  cursor: pointer;
+}
+
+.row-menu-item:hover {
+  background: #f1f5fb;
+}
+
+.row-menu-divider {
+  height: 1px;
+  background: #eef2f8;
+  margin: 4px 0;
 }
 
 .kebab {
