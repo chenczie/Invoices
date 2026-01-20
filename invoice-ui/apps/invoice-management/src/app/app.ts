@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { forkJoin, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
 
 import { INVOICE_MANAGEMENT_LIBRARY } from '@invoice-management/invoice-management';
 
@@ -286,15 +285,17 @@ export class App implements OnInit {
 
   ngOnInit(): void {
     forkJoin({
-      invoices: this.invoiceApi
-        .getInvoices()
-        .pipe(catchError((error) => this.handleApiError(error, INVOICES))),
-      invoiceTypes: this.invoiceApi
-        .getInvoiceTypes()
-        .pipe(catchError((error) => this.handleApiError(error, INVOICE_TYPES)))
-    }).subscribe(({ invoices, invoiceTypes }) => {
-      this.invoices = invoices;
-      this.invoiceTypes = invoiceTypes;
+      invoices: this.invoiceApi.getInvoices(),
+      invoiceTypes: this.invoiceApi.getInvoiceTypes()
+    }).subscribe({
+      next: ({ invoices, invoiceTypes }) => {
+        this.invoices = invoices;
+        this.invoiceTypes = invoiceTypes;
+      },
+      error: (error) => {
+        console.error('Invoice API request failed.', error);
+        this.invoices = [];
+      }
     });
   }
 
@@ -321,10 +322,6 @@ export class App implements OnInit {
     this.showColumnSettings = false;
   }
 
-  private handleApiError<T>(error: unknown, fallback: T[]): import('rxjs').Observable<T[]> {
-    console.error('Invoice API request failed. Using fallback data.', error);
-    return of(fallback);
-  }
 
   getColumnClass(field: string): string {
     return COLUMN_CLASS_MAP[field] ?? 'col-default';
