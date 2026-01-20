@@ -96,18 +96,18 @@ export class InvoiceApiService {
       localStorage.getItem('alcheme_token') ??
       localStorage.getItem('token') ??
       localStorage.getItem('alcheme_api_token');
-    const username = localStorage.getItem('alcheme_username') ?? localStorage.getItem('username');
-    const company = localStorage.getItem('alcheme_company') ?? localStorage.getItem('company');
+    const companyId =
+      localStorage.getItem('alcheme_company_id') ??
+      localStorage.getItem('companyId') ??
+      localStorage.getItem('x-companyid') ??
+      this.getCompanyIdFromToken(token);
 
     let headers = new HttpHeaders();
     if (token) {
-      headers = headers.set('token', token);
+      headers = headers.set('Authorization', `Bearer ${token}`);
     }
-    if (username) {
-      headers = headers.set('username', username);
-    }
-    if (company) {
-      headers = headers.set('company', company);
+    if (companyId) {
+      headers = headers.set('x-companyid', companyId);
     }
 
     return headers.keys().length ? headers : undefined;
@@ -207,5 +207,31 @@ export class InvoiceApiService {
 
   private isLocalBackend(baseUrl: string): boolean {
     return baseUrl.includes('localhost') || baseUrl.includes('127.0.0.1');
+  }
+
+  private getCompanyIdFromToken(token: string | null): string | null {
+    if (!token) {
+      return null;
+    }
+    try {
+      const payload = token.split('.')[1];
+      if (!payload) {
+        return null;
+      }
+      const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+      const data = JSON.parse(json) as Record<string, unknown>;
+      const selected = data.selectedCompanyId;
+      if (typeof selected === 'string' || typeof selected === 'number') {
+        return String(selected);
+      }
+      const userCompany = data.userCompanyId;
+      if (typeof userCompany === 'string' || typeof userCompany === 'number') {
+        return String(userCompany);
+      }
+      return null;
+    } catch (error) {
+      console.warn('Failed to parse company id from token.', error);
+      return null;
+    }
   }
 }
