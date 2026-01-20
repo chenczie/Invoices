@@ -1,10 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 import { INVOICE_MANAGEMENT_LIBRARY } from '@invoice-management/invoice-management';
 
 import { Invoice } from './models/invoice.model';
 import { InvoiceType } from './models/invoice-type.model';
+import { InvoiceApiService } from './services/invoice-api.service';
 
 interface FilterChip {
   label: string;
@@ -74,30 +77,24 @@ const SORTABLE_FIELDS = new Set(['InvoiceId', 'BillingClientNumber', 'InvoiceNum
 
 const INVOICE_TYPES: InvoiceType[] = [
   {
-    id: 1,
+    invoiceTypeId: 1,
     invoiceTypeDescription: 'Standard Billing',
     assetDirectory: '/assets/invoices/standard',
     siteId: 1
   },
   {
-    id: 2,
+    invoiceTypeId: 2,
     invoiceTypeDescription: 'Escrow Statement',
     assetDirectory: '/assets/invoices/escrow',
     siteId: 1
   },
   {
-    id: 3,
+    invoiceTypeId: 3,
     invoiceTypeDescription: 'Production Run',
     assetDirectory: '/assets/invoices/production',
     siteId: 2
   }
 ];
-
-const INVOICE_TYPE_MAP = new Map<number, InvoiceType>(
-  INVOICE_TYPES.flatMap((invoiceType) =>
-    invoiceType.id == null ? [] : ([[invoiceType.id, invoiceType]] as const)
-  )
-);
 
 const INVOICES: Invoice[] = [
   {
@@ -268,8 +265,9 @@ const INVOICES: Invoice[] = [
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
-export class App {
-  readonly invoices = INVOICES;
+export class App implements OnInit {
+  invoices: Invoice[] = INVOICES;
+  invoiceTypes: InvoiceType[] = INVOICE_TYPES;
   readonly rowActions = ROW_ACTIONS;
   readonly invoiceColumns = INVOICE_COLUMNS;
   readonly columnFieldOptions = COLUMN_FIELD_OPTIONS;
@@ -283,6 +281,18 @@ export class App {
   selectedInvoice: Invoice | null = null;
   detailInvoice: Invoice | null = null;
   showColumnSettings = false;
+
+  constructor(private readonly invoiceApi: InvoiceApiService) {}
+
+  ngOnInit(): void {
+    forkJoin({
+      invoices: this.invoiceApi.getInvoices().pipe(catchError(() => of(INVOICES))),
+      invoiceTypes: this.invoiceApi.getInvoiceTypes().pipe(catchError(() => of(INVOICE_TYPES)))
+    }).subscribe(({ invoices, invoiceTypes }) => {
+      this.invoices = invoices;
+      this.invoiceTypes = invoiceTypes;
+    });
+  }
 
   selectInvoice(invoice: Invoice): void {
     this.selectedInvoice = invoice;
@@ -370,6 +380,9 @@ export class App {
     if (invoice.invoiceTypeId == null) {
       return '/assets/invoices';
     }
-    return INVOICE_TYPE_MAP.get(invoice.invoiceTypeId)?.assetDirectory ?? '/assets/invoices';
+    const invoiceType = this.invoiceTypes.find(
+      (item) => (item.invoiceTypeId ?? item.id) === invoice.invoiceTypeId
+    );
+    return invoiceType?.assetDirectory ?? '/assets/invoices';
   }
 }
