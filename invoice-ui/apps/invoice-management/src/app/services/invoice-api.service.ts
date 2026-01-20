@@ -220,11 +220,11 @@ export class InvoiceApiService {
       }
       const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
       const data = JSON.parse(json) as Record<string, unknown>;
-      const selected = data.selectedCompanyId;
+      const selected = data['selectedCompanyId'];
       if (typeof selected === 'string' || typeof selected === 'number') {
         return String(selected);
       }
-      const userCompany = data.userCompanyId;
+      const userCompany = data['userCompanyId'];
       if (typeof userCompany === 'string' || typeof userCompany === 'number') {
         return String(userCompany);
       }
