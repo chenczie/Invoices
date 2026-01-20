@@ -12,12 +12,44 @@ interface InvoiceApiResponse {
 @Injectable({ providedIn: 'root' })
 export class InvoiceApiService {
   private readonly baseUrl = 'https://cisstg03.racami.com/AlchemeAPI';
+  private readonly invoiceSelectFields = [
+    'InvoiceId',
+    'CompanyId',
+    'JobId',
+    'InvoiceTypeId',
+    'AlternateClientNumber',
+    'InvoiceNumber',
+    'AlternateCompanyName',
+    'StatementDate',
+    'PdfFileName',
+    'ProductId',
+    'CustomField1',
+    'CustomField2',
+    'CustomField3',
+    'CustomField4',
+    'SiteId',
+    'BillingClientNumber',
+    'ExternalIdentifier',
+    'ExcelFileName'
+  ];
+  private readonly invoiceTypeSelectFields = [
+    'InvoiceTypeId',
+    'InvoiceTypeDescription',
+    'AssetDirectory',
+    'SiteId'
+  ];
 
   constructor(private readonly http: HttpClient) {}
 
   getInvoices(): Observable<Invoice[]> {
+    const query = this.buildOdataQuery({
+      top: 25,
+      skip: 0,
+      select: this.invoiceSelectFields,
+      orderby: 'InvoiceId asc'
+    });
     return this.http
-      .get<Invoice[] | InvoiceApiResponse>(`${this.baseUrl}/odata/Invoice`, {
+      .get<Invoice[] | InvoiceApiResponse>(`${this.baseUrl}/odata/Invoice${query}`, {
         headers: this.getAuthHeaders()
       })
       .pipe(
@@ -27,8 +59,14 @@ export class InvoiceApiService {
   }
 
   getInvoiceTypes(): Observable<InvoiceType[]> {
+    const query = this.buildOdataQuery({
+      top: 200,
+      skip: 0,
+      select: this.invoiceTypeSelectFields,
+      orderby: 'InvoiceTypeId asc'
+    });
     return this.http
-      .get<InvoiceType[] | InvoiceApiResponse>(`${this.baseUrl}/odata/InvoiceType`, {
+      .get<InvoiceType[] | InvoiceApiResponse>(`${this.baseUrl}/odata/InvoiceType${query}`, {
         headers: this.getAuthHeaders()
       })
       .pipe(
@@ -38,18 +76,22 @@ export class InvoiceApiService {
   }
 
   private getAuthHeaders(): HttpHeaders | undefined {
-    const token = localStorage.getItem('alcheme_api_token');
-    const companyId =
-      localStorage.getItem('alcheme_company_id') ??
-      localStorage.getItem('companyId') ??
-      localStorage.getItem('x-companyid');
+    const token =
+      localStorage.getItem('alcheme_token') ??
+      localStorage.getItem('token') ??
+      localStorage.getItem('alcheme_api_token');
+    const username = localStorage.getItem('alcheme_username') ?? localStorage.getItem('username');
+    const company = localStorage.getItem('alcheme_company') ?? localStorage.getItem('company');
 
     let headers = new HttpHeaders();
     if (token) {
-      headers = headers.set('Authorization', `Bearer ${token}`);
+      headers = headers.set('token', token);
     }
-    if (companyId) {
-      headers = headers.set('x-companyid', companyId);
+    if (username) {
+      headers = headers.set('username', username);
+    }
+    if (company) {
+      headers = headers.set('company', company);
     }
 
     return headers.keys().length ? headers : undefined;
@@ -106,5 +148,33 @@ export class InvoiceApiService {
       assetDirectory: (value.AssetDirectory as string) ?? (value.assetDirectory as string) ?? null,
       siteId: (value.SiteId as number) ?? (value.siteId as number) ?? null
     };
+  }
+
+  private buildOdataQuery(options: {
+    top: number;
+    skip: number;
+    select: string[];
+    orderby?: string;
+    filter?: string;
+    apply?: string;
+    take?: number;
+  }): string {
+    const params = new URLSearchParams();
+    params.set('$top', options.top.toString());
+    params.set('$skip', options.skip.toString());
+    params.set('$select', options.select.join(','));
+    if (options.orderby) {
+      params.set('$orderby', options.orderby);
+    }
+    if (options.filter) {
+      params.set('$filter', options.filter);
+    }
+    if (options.apply) {
+      params.set('$apply', options.apply);
+    }
+    if (options.take != null) {
+      params.set('$take', options.take.toString());
+    }
+    return `?${params.toString()}`;
   }
 }
