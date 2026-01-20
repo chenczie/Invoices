@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { forkJoin } from 'rxjs';
 
 import { INVOICE_MANAGEMENT_LIBRARY } from '@invoice-management/invoice-management';
 
@@ -265,8 +264,8 @@ const INVOICES: Invoice[] = [
   styleUrl: './app.scss'
 })
 export class App implements OnInit {
-  invoices: Invoice[] = INVOICES;
-  invoiceTypes: InvoiceType[] = INVOICE_TYPES;
+  invoices: Invoice[] = [];
+  invoiceTypes: InvoiceType[] = [];
   readonly rowActions = ROW_ACTIONS;
   readonly invoiceColumns = INVOICE_COLUMNS;
   readonly columnFieldOptions = COLUMN_FIELD_OPTIONS;
@@ -284,17 +283,23 @@ export class App implements OnInit {
   constructor(private readonly invoiceApi: InvoiceApiService) {}
 
   ngOnInit(): void {
-    forkJoin({
-      invoices: this.invoiceApi.getInvoices(),
-      invoiceTypes: this.invoiceApi.getInvoiceTypes()
-    }).subscribe({
-      next: ({ invoices, invoiceTypes }) => {
+    this.invoiceApi.getInvoices().subscribe({
+      next: (invoices) => {
         this.invoices = invoices;
-        this.invoiceTypes = invoiceTypes;
       },
       error: (error) => {
         console.error('Invoice API request failed.', error);
         this.invoices = [];
+      }
+    });
+
+    this.invoiceApi.getInvoiceTypes().subscribe({
+      next: (invoiceTypes) => {
+        this.invoiceTypes = invoiceTypes;
+      },
+      error: (error) => {
+        console.error('Invoice type API request failed.', error);
+        this.invoiceTypes = [];
       }
     });
   }
