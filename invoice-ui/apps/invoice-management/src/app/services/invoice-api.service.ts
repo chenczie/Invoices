@@ -39,10 +39,20 @@ export class InvoiceApiService {
 
   private getAuthHeaders(): HttpHeaders | undefined {
     const token = localStorage.getItem('alcheme_api_token');
-    if (!token) {
-      return undefined;
+    const companyId =
+      localStorage.getItem('alcheme_company_id') ??
+      localStorage.getItem('companyId') ??
+      localStorage.getItem('x-companyid');
+
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
     }
-    return new HttpHeaders({ Authorization: `Bearer ${token}` });
+    if (companyId) {
+      headers = headers.set('x-companyid', companyId);
+    }
+
+    return headers.keys().length ? headers : undefined;
   }
 
   private normalizeArray(response: Invoice[] | InvoiceType[] | InvoiceApiResponse): unknown[] {
