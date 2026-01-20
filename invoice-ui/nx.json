@@ -1,0 +1,10 @@
+{
+  "npmScope": "invoice-management",
+  "affected": {
+    "defaultBase": "main"
+  },
+  "workspaceLayout": {
+    "appsDir": "apps",
+    "libsDir": "libs"
+  }
+}
