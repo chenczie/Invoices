@@ -286,8 +286,12 @@ export class App implements OnInit {
 
   ngOnInit(): void {
     forkJoin({
-      invoices: this.invoiceApi.getInvoices().pipe(catchError(() => of(INVOICES))),
-      invoiceTypes: this.invoiceApi.getInvoiceTypes().pipe(catchError(() => of(INVOICE_TYPES)))
+      invoices: this.invoiceApi
+        .getInvoices()
+        .pipe(catchError((error) => this.handleApiError(error, INVOICES))),
+      invoiceTypes: this.invoiceApi
+        .getInvoiceTypes()
+        .pipe(catchError((error) => this.handleApiError(error, INVOICE_TYPES)))
     }).subscribe(({ invoices, invoiceTypes }) => {
       this.invoices = invoices;
       this.invoiceTypes = invoiceTypes;
@@ -315,6 +319,11 @@ export class App implements OnInit {
 
   closeColumnSettings(): void {
     this.showColumnSettings = false;
+  }
+
+  private handleApiError<T>(error: unknown, fallback: T[]): import('rxjs').Observable<T[]> {
+    console.error('Invoice API request failed. Using fallback data.', error);
+    return of(fallback);
   }
 
   getColumnClass(field: string): string {

@@ -42,15 +42,21 @@ export class InvoiceApiService {
   constructor(private readonly http: HttpClient) {}
 
   getInvoices(): Observable<Invoice[]> {
-    const query = this.buildOdataQuery({
+    const baseUrl = this.getBaseUrl();
+    const useLocalBackend = this.isLocalBackend(baseUrl);
+    const query = useLocalBackend
+      ? ''
+      : this.buildOdataQuery({
       top: 25,
       skip: 0,
       select: this.invoiceSelectFields,
       orderby: 'InvoiceId asc'
-    });
+        });
+    const endpoint = useLocalBackend ? '/api/invoices' : '/odata/Invoice';
+
     return this.http
-      .get<Invoice[] | InvoiceApiResponse>(`${this.baseUrl}/odata/Invoice${query}`, {
-        headers: this.getAuthHeaders()
+      .get<Invoice[] | InvoiceApiResponse>(`${baseUrl}${endpoint}${query}`, {
+        headers: this.getAuthHeaders(useLocalBackend)
       })
       .pipe(
         map((response) => this.normalizeArray(response)),
@@ -59,15 +65,21 @@ export class InvoiceApiService {
   }
 
   getInvoiceTypes(): Observable<InvoiceType[]> {
-    const query = this.buildOdataQuery({
+    const baseUrl = this.getBaseUrl();
+    const useLocalBackend = this.isLocalBackend(baseUrl);
+    const query = useLocalBackend
+      ? ''
+      : this.buildOdataQuery({
       top: 200,
       skip: 0,
       select: this.invoiceTypeSelectFields,
       orderby: 'InvoiceTypeId asc'
-    });
+        });
+    const endpoint = useLocalBackend ? '/api/invoice-types' : '/odata/InvoiceType';
+
     return this.http
-      .get<InvoiceType[] | InvoiceApiResponse>(`${this.baseUrl}/odata/InvoiceType${query}`, {
-        headers: this.getAuthHeaders()
+      .get<InvoiceType[] | InvoiceApiResponse>(`${baseUrl}${endpoint}${query}`, {
+        headers: this.getAuthHeaders(useLocalBackend)
       })
       .pipe(
         map((response) => this.normalizeArray(response)),
@@ -75,7 +87,11 @@ export class InvoiceApiService {
       );
   }
 
-  private getAuthHeaders(): HttpHeaders | undefined {
+  private getAuthHeaders(useLocalBackend: boolean): HttpHeaders | undefined {
+    if (useLocalBackend) {
+      return undefined;
+    }
+
     const token =
       localStorage.getItem('alcheme_token') ??
       localStorage.getItem('token') ??
@@ -179,5 +195,17 @@ export class InvoiceApiService {
       params.set('$take', options.take.toString());
     }
     return `?${params.toString()}`;
+  }
+
+  private getBaseUrl(): string {
+    return (
+      localStorage.getItem('alcheme_api_base_url')?.trim() ||
+      localStorage.getItem('api_base_url')?.trim() ||
+      this.baseUrl
+    );
+  }
+
+  private isLocalBackend(baseUrl: string): boolean {
+    return baseUrl.includes('localhost') || baseUrl.includes('127.0.0.1');
   }
 }
