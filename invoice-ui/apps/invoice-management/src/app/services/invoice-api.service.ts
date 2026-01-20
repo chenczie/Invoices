@@ -28,8 +28,7 @@ export class InvoiceApiService {
     'CustomField3',
     'CustomField4',
     'SiteId',
-    'BillingClientNumber',
-    'ExcelFileName'
+    'BillingClientNumber'
   ];
   private readonly invoiceTypeSelectFields = [
     'InvoiceTypeId',
