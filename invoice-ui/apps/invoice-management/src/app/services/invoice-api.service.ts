@@ -106,47 +106,50 @@ export class InvoiceApiService {
 
   private mapInvoice(raw: unknown): Invoice {
     const value = raw as Record<string, unknown>;
+    const pick = <T>(key: string): T | undefined => value[key] as T | undefined;
+    const pickAlt = <T>(key: string, altKey: string): T | undefined =>
+      (value[key] ?? value[altKey]) as T | undefined;
+    const statementDateValue = pickAlt<string>('StatementDate', 'statementDate');
+
     return {
-      id: (value.InvoiceId as number) ?? (value.invoiceId as number) ?? (value.id as number),
-      companyId: (value.CompanyId as number) ?? (value.companyId as number) ?? null,
-      jobId: (value.JobId as number) ?? (value.jobId as number) ?? null,
-      invoiceTypeId: (value.InvoiceTypeId as number) ?? (value.invoiceTypeId as number) ?? null,
+      id: pickAlt<number>('InvoiceId', 'invoiceId') ?? pick<number>('id'),
+      companyId: pickAlt<number>('CompanyId', 'companyId') ?? null,
+      jobId: pickAlt<number>('JobId', 'jobId') ?? null,
+      invoiceTypeId: pickAlt<number>('InvoiceTypeId', 'invoiceTypeId') ?? null,
       alternateClientNumber:
-        (value.AlternateClientNumber as string) ?? (value.alternateClientNumber as string) ?? null,
-      invoiceNumber: (value.InvoiceNumber as string) ?? (value.invoiceNumber as string) ?? null,
+        pickAlt<string>('AlternateClientNumber', 'alternateClientNumber') ?? null,
+      invoiceNumber: pickAlt<string>('InvoiceNumber', 'invoiceNumber') ?? null,
       alternateCompanyName:
-        (value.AlternateCompanyName as string) ?? (value.alternateCompanyName as string) ?? null,
-      statementDate: value.StatementDate
-        ? new Date(value.StatementDate as string)
-        : value.statementDate
-          ? new Date(value.statementDate as string)
-          : null,
-      pdfFileName: (value.PdfFileName as string) ?? (value.pdfFileName as string) ?? null,
-      productId: (value.ProductId as number) ?? (value.productId as number) ?? null,
-      customField1: (value.CustomField1 as string) ?? (value.customField1 as string) ?? null,
-      customField2: (value.CustomField2 as string) ?? (value.customField2 as string) ?? null,
-      customField3: (value.CustomField3 as string) ?? (value.customField3 as string) ?? null,
-      customField4: (value.CustomField4 as string) ?? (value.customField4 as string) ?? null,
-      siteId: (value.SiteId as number) ?? (value.siteId as number) ?? null,
+        pickAlt<string>('AlternateCompanyName', 'alternateCompanyName') ?? null,
+      statementDate: statementDateValue ? new Date(statementDateValue) : null,
+      pdfFileName: pickAlt<string>('PdfFileName', 'pdfFileName') ?? null,
+      productId: pickAlt<number>('ProductId', 'productId') ?? null,
+      customField1: pickAlt<string>('CustomField1', 'customField1') ?? null,
+      customField2: pickAlt<string>('CustomField2', 'customField2') ?? null,
+      customField3: pickAlt<string>('CustomField3', 'customField3') ?? null,
+      customField4: pickAlt<string>('CustomField4', 'customField4') ?? null,
+      siteId: pickAlt<number>('SiteId', 'siteId') ?? null,
       billingClientNumber:
-        (value.BillingClientNumber as string) ?? (value.billingClientNumber as string) ?? null,
+        pickAlt<string>('BillingClientNumber', 'billingClientNumber') ?? null,
       externalIdentifier:
-        (value.ExternalIdentifier as string) ?? (value.externalIdentifier as string) ?? null,
-      excelFileName: (value.ExcelFileName as string) ?? (value.excelFileName as string) ?? null
+        pickAlt<string>('ExternalIdentifier', 'externalIdentifier') ?? null,
+      excelFileName: pickAlt<string>('ExcelFileName', 'excelFileName') ?? null
     };
   }
 
   private mapInvoiceType(raw: unknown): InvoiceType {
     const value = raw as Record<string, unknown>;
+    const pick = <T>(key: string): T | undefined => value[key] as T | undefined;
+    const pickAlt = <T>(key: string, altKey: string): T | undefined =>
+      (value[key] ?? value[altKey]) as T | undefined;
+
     return {
-      id: (value.InvoiceTypeId as number) ?? (value.id as number),
-      invoiceTypeId: (value.InvoiceTypeId as number) ?? (value.invoiceTypeId as number) ?? null,
+      id: pick<number>('InvoiceTypeId') ?? pick<number>('id'),
+      invoiceTypeId: pickAlt<number>('InvoiceTypeId', 'invoiceTypeId') ?? null,
       invoiceTypeDescription:
-        (value.InvoiceTypeDescription as string) ??
-        (value.invoiceTypeDescription as string) ??
-        null,
-      assetDirectory: (value.AssetDirectory as string) ?? (value.assetDirectory as string) ?? null,
-      siteId: (value.SiteId as number) ?? (value.siteId as number) ?? null
+        pickAlt<string>('InvoiceTypeDescription', 'invoiceTypeDescription') ?? null,
+      assetDirectory: pickAlt<string>('AssetDirectory', 'assetDirectory') ?? null,
+      siteId: pickAlt<number>('SiteId', 'siteId') ?? null
     };
   }
 
